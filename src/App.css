@@ -2,37 +2,107 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.menuSection {
+  background-color: #616161;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.contentSection {
+  background-color: #4B4B4B;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.theme-card {
+  background-color: #616161;
+}
+
+.theme-card-dark {
+  background-color: #4B4B4B;
+}
+
+.bgWellnessCard {
+  background-image: url("./images/bgWellnessCard.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.cursorPointer {
+  cursor: pointer;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  outline-color: #4B4B4B;
+}
+
+.input-group-text {
+  background-color: #4B4B4B;
+  border-color: #cecece;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.cardThemeActive {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: absolute;
+  top: 25%;
+  left: 40%;
+  padding: 50px 10px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.textDecoration a {
+  text-decoration: none;
+}
+
+.dropDown {
+  position: relative;
+  display: none;
+}
+
+.dropedDown {
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+ul li {
+  list-style: none;
+  transition: ease-in-out .4s;
+}
+
+ul li:hover {
+  list-style: none;
+  background-color: #616161;
+}
+
+ul li a {
+  text-decoration: none;
+  color: white;
+}
+
+.customInput {
+  background: transparent;
+  border-top: 2px;
+  border-left: 2px;
+  border-right: 2px;
+  border-color: #4B4B4B;
+  outline: none;
+  transition: ease-in-out .4s;
+}
+
+.customInput:focus {
+  background: transparent;
+  border-top: 2px;
+  border-left: 2px;
+  border-right: 2px;
+  border-color: #9d9d9d;
+  outline: none;
+}
+
+.passwordIcon {
+  position: absolute;
+  top: 56%;
+  right: 14px;
+  color: #616161;
 }
