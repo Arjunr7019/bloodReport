@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../../App.css';
 import profileImg from "../../images/profile.jpg";
 import AddNewData from '../smallComponents/AddNewData/AddNewData';
@@ -23,15 +23,45 @@ Chartjs.register(
     Tooltip
 )
 
-export default function Dashboard() {
+export default function Dashboard(value) {
     const [graph, setGraph] = useState(true);
     const [selectedId, setSelectedId] = useState(null);
+    const [parameterValueForGraph, setParameterValueForGraph] = useState([]);
+
+    const userData = useRef("");
+
+    // function convertToDate(dateString) {
+    //     const [year, month, day] = dateString.split("-").map(Number);
+    //     return new Date(year, month - 1, day);
+    // }
+
+    useEffect(() => {
+        setTimeout(async () => {
+            const response = await fetch('https://bloodreport-server.onrender.com/api/LoggedInUserData', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: value.value.email
+                })
+            });
+            if (response.status === 200) {
+                // The user is authenticated.
+                let data = await response.json();
+                setParameterValueForGraph(data.parameters.ESR);
+                userData.current = data;
+            } else {
+                // The user is not authenticated.
+            }
+        }, 10)
+    }, [])
 
     const data = {
-        labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+        labels: parameterValueForGraph.map((data) => data.date),
         datasets: [{
             label: 'ESR',
-            data: [65, 59, 80, 81, 56, 55, 40],
+            data: parameterValueForGraph.map((data) => data.value),
             backgroundColor: '#296dc0',
             borderColor: '#3690fe',
             pointBorderColor: '#296dc0',
@@ -80,16 +110,17 @@ export default function Dashboard() {
             }
         }
     }
+    // console.log(convertToDate(userData.current.DOB))
 
     return (
         <div className='contentSection vh-100 w-75'>
             <div className='my-4 w-100 d-flex justify-content-staet align-items-center flex-row px-5'>
                 <h3 className='text-light'>Dashboard</h3>
                 <div className='theme-card d-flex justify-content-center align-items-center mx-2 rounded-2'>
-                    <p className='text-light text-center mx-3 my-1 fs-6'>Last Test: Feb 12, 2021</p>
+                    <p className='text-light text-center mx-3 my-1 fs-6'>{"Last Test:" + " " + userData.current.lastUpdateDate}</p>
                 </div>
                 <div className='theme-card d-flex justify-content-center align-items-center mx-2 rounded-2'>
-                    <p className='text-light text-center mx-3 my-1 fs-6'>Joined: Feb 12, 2021</p>
+                    <p className='text-light text-center mx-3 my-1 fs-6'>{"Joined:" + " " + userData.current.joinedDate}</p>
                 </div>
             </div>
 
@@ -99,9 +130,9 @@ export default function Dashboard() {
                         <motion.img className='w-50 rounded-circle' src={profileImg} alt="profileImg" />
                     </motion.div>
                     <motion.div className='d-flex justify-content-start align-items-center flex-column'>
-                        <motion.h5 className='text-light text-start w-100'>Name</motion.h5>
-                        <motion.p className='text-light text-start w-100 my-0'>DOB:30/03/2000</motion.p>
-                        <motion.p className='text-light text-start w-100 my-0'>Gender:Male</motion.p>
+                        <motion.h5 className='text-light text-start w-100'>{"Name:" + " " + userData.current.name}</motion.h5>
+                        <motion.p className='text-light text-start w-100 my-0'>{"DOB:" + " " + userData.current.DOB}</motion.p>
+                        <motion.p className='text-light text-start w-100 my-0'>{"Gender:" + " " + userData.current.gender}</motion.p>
                     </motion.div>
                     <motion.div className='px-2'>
                         <motion.div className='cursorPointer theme-card-dark rounded-2 my-2'>
@@ -127,15 +158,15 @@ export default function Dashboard() {
                             <motion.div className='d-flex justify-content-start align-items-center flex-column mx-3 my-2'>
                                 <motion.div className='w-100 d-flex justify-content-center align-items-center flex-row mb-2'>
                                     <motion.p className='text-light m-0 me-2'>Name:</motion.p>
-                                    <motion.input type='text' placeholder='name' className='customInput text-light text-start w-100'></motion.input>
+                                    <motion.input type='text' placeholder={userData.current.name} className='placeholderColor customInput text-light text-start w-100'></motion.input>
                                 </motion.div>
                                 <motion.div className='w-100 d-flex justify-content-center align-items-center flex-row mb-2'>
                                     <motion.p className='text-light m-0 me-2'>DOB:</motion.p>
-                                    <motion.input type='date' className='customInput text-light text-start w-100 my-0'></motion.input>
+                                    <motion.input type='date' defaultValue={userData.current.DOB} placeholder={userData.current.DOB} className='placeholderColor customInput text-light text-start w-100 my-0'></motion.input>
                                 </motion.div>
                                 <motion.div className='w-100 d-flex justify-content-center align-items-center flex-row mb-2'>
                                     <motion.p className='text-light m-0 me-2'>Gender</motion.p>
-                                    <motion.input type='text' placeholder='Male or Female' className='customInput text-light text-start w-100 my-0'></motion.input>
+                                    <motion.input type='text' placeholder={userData.current.gender} className='placeholderColor customInput text-light text-start w-100 my-0'></motion.input>
                                 </motion.div>
                             </motion.div>
                             <motion.button className='cursorPointer theme-card-dark rounded-2 my-2 text-light' onClick={() => setSelectedId(null)}>Save</motion.button>

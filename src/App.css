@@ -1,6 +1,12 @@
 .App {
   text-align: center;
 }
+.width-35{
+  width: 35% !important;
+}
+.placeholderColor::placeholder{
+  color: white;
+}
 
 .menuSection {
   background-color: #616161;
@@ -64,6 +70,7 @@
   position: relative;
   top: 0;
   left: 0;
+  border-radius: 0 0 6px 6px;
 }
 
 ul li {
@@ -105,4 +112,7 @@ ul li a {
   top: 56%;
   right: 14px;
   color: #616161;
+}
+.dropDownBorder{
+  border-radius: 6px 0 0 6px !important;
 }
