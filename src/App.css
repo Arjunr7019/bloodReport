@@ -116,3 +116,7 @@ ul li a {
 .dropDownBorder{
   border-radius: 6px 0 0 6px !important;
 }
+.outlineAndBorder{
+  outline: none;
+  border: none;
+}

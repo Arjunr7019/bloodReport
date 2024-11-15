@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import '../../App.css';
 import profileImg from "../../images/profile.jpg";
 import AddNewData from '../smallComponents/AddNewData/AddNewData';
 import { motion, AnimatePresence } from "framer-motion";
+import { UserAuthContext } from '../../Context/UserAuthContext';
 import { Line } from 'react-chartjs-2';
 import {
     Chart as Chartjs,
@@ -13,6 +14,7 @@ import {
     Legend,
     Tooltip
 } from 'chart.js';
+import Services from '../../Services/Services';
 
 Chartjs.register(
     LineElement,
@@ -23,13 +25,21 @@ Chartjs.register(
     Tooltip
 )
 
-export default function Dashboard(value) {
+
+export default function Dashboard() {
     const [graph, setGraph] = useState(true);
     const [selectedId, setSelectedId] = useState(null);
     const [parameterValueForGraph, setParameterValueForGraph] = useState([]);
 
-    const userData = useRef("");
+    const {userData, setUserData} = useContext(UserAuthContext)
 
+    const userInfo = useRef("");
+    const parametersName = useRef("ESR");
+
+    const parameterValue = [
+        {value:"ESR", id:"1"},
+        {value:"CRP", id:"2"}
+    ]
     // function convertToDate(dateString) {
     //     const [year, month, day] = dateString.split("-").map(Number);
     //     return new Date(year, month - 1, day);
@@ -43,18 +53,19 @@ export default function Dashboard(value) {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    email: value.value.email
+                    email: userData?.data.user.email
                 })
             });
             if (response.status === 200) {
                 // The user is authenticated.
                 let data = await response.json();
                 setParameterValueForGraph(data.parameters.ESR);
-                userData.current = data;
+                userInfo.current = data;
             } else {
                 // The user is not authenticated.
             }
         }, 10)
+        console.log(userData)
     }, [])
 
     const data = {
@@ -117,10 +128,10 @@ export default function Dashboard(value) {
             <div className='my-4 w-100 d-flex justify-content-staet align-items-center flex-row px-5'>
                 <h3 className='text-light'>Dashboard</h3>
                 <div className='theme-card d-flex justify-content-center align-items-center mx-2 rounded-2'>
-                    <p className='text-light text-center mx-3 my-1 fs-6'>{"Last Test:" + " " + userData.current.lastUpdateDate}</p>
+                    <p className='text-light text-center mx-3 my-1 fs-6'>{"Last Test:" + " " + userInfo.current.lastUpdateDate}</p>
                 </div>
                 <div className='theme-card d-flex justify-content-center align-items-center mx-2 rounded-2'>
-                    <p className='text-light text-center mx-3 my-1 fs-6'>{"Joined:" + " " + userData.current.joinedDate}</p>
+                    <p className='text-light text-center mx-3 my-1 fs-6'>{"Joined:" + " " + userInfo.current.joinedDate}</p>
                 </div>
             </div>
 
@@ -130,16 +141,16 @@ export default function Dashboard(value) {
                         <motion.img className='w-50 rounded-circle' src={profileImg} alt="profileImg" />
                     </motion.div>
                     <motion.div className='d-flex justify-content-start align-items-center flex-column'>
-                        <motion.h5 className='text-light text-start w-100'>{"Name:" + " " + userData.current.name}</motion.h5>
-                        <motion.p className='text-light text-start w-100 my-0'>{"DOB:" + " " + userData.current.DOB}</motion.p>
-                        <motion.p className='text-light text-start w-100 my-0'>{"Gender:" + " " + userData.current.gender}</motion.p>
+                        <motion.h5 className='text-light text-start w-100'>{"Name:" + " " + userInfo.current.name}</motion.h5>
+                        <motion.p className='text-light text-start w-100 my-0'>{"DOB:" + " " + userInfo.current.DOB}</motion.p>
+                        <motion.p className='text-light text-start w-100 my-0'>{"Gender:" + " " + userInfo.current.gender}</motion.p>
                     </motion.div>
                     <motion.div className='px-2'>
                         <motion.div className='cursorPointer theme-card-dark rounded-2 my-2'>
                             <motion.p className='text-light m-0 px-3 py-1' onClick={() => setSelectedId('1')}>Edit Profile</motion.p>
                         </motion.div>
                         <motion.div className='cursorPointer theme-card-dark rounded-2 my-2'>
-                            <p className='text-light m-0 px-3 py-1'>Log out</p>
+                            <p onClick={()=> {Services.Logout(); setUserData(null)}} className='text-light m-0 px-3 py-1'>Log out</p>
                         </motion.div>
                     </motion.div>
                 </motion.div>
@@ -158,15 +169,15 @@ export default function Dashboard(value) {
                             <motion.div className='d-flex justify-content-start align-items-center flex-column mx-3 my-2'>
                                 <motion.div className='w-100 d-flex justify-content-center align-items-center flex-row mb-2'>
                                     <motion.p className='text-light m-0 me-2'>Name:</motion.p>
-                                    <motion.input type='text' placeholder={userData.current.name} className='placeholderColor customInput text-light text-start w-100'></motion.input>
+                                    <motion.input type='text' placeholder={userInfo.current.name} className='placeholderColor customInput text-light text-start w-100'></motion.input>
                                 </motion.div>
                                 <motion.div className='w-100 d-flex justify-content-center align-items-center flex-row mb-2'>
                                     <motion.p className='text-light m-0 me-2'>DOB:</motion.p>
-                                    <motion.input type='date' defaultValue={userData.current.DOB} placeholder={userData.current.DOB} className='placeholderColor customInput text-light text-start w-100 my-0'></motion.input>
+                                    <motion.input type='date' defaultValue={userInfo.current.DOB} placeholder={userInfo.current.DOB} className='placeholderColor customInput text-light text-start w-100 my-0'></motion.input>
                                 </motion.div>
                                 <motion.div className='w-100 d-flex justify-content-center align-items-center flex-row mb-2'>
                                     <motion.p className='text-light m-0 me-2'>Gender</motion.p>
-                                    <motion.input type='text' placeholder={userData.current.gender} className='placeholderColor customInput text-light text-start w-100 my-0'></motion.input>
+                                    <motion.input type='text' placeholder={userInfo.current.gender} className='placeholderColor customInput text-light text-start w-100 my-0'></motion.input>
                                 </motion.div>
                             </motion.div>
                             <motion.button className='cursorPointer theme-card-dark rounded-2 my-2 text-light' onClick={() => setSelectedId(null)}>Save</motion.button>
@@ -184,9 +195,9 @@ export default function Dashboard(value) {
                 <div className='theme-card mx-5 rounded-3'>
                     <div className='py-2 d-flex justify-content-start align-items-center flex-row'>
                         <h4 className='px-5 text-light'>{graph ? "Performance Track" : "Add New Data"}</h4>
-                        <div className={graph ? 'theme-card-dark d-flex justify-content-center align-items-center mx-2 rounded-2' : 'd-none'}>
-                            <p className='text-light text-center mx-3 my-1 fs-6'>ESR</p>
-                        </div>
+                        <select onChange={(e)=> parametersName.current = e.target.value} className={graph ? 'outlineAndBorder text-light theme-card-dark d-flex justify-content-center align-items-center mx-2 rounded-2 px-2 py-1' : 'd-none'}>
+                            {parameterValue.map((data)=> <option className='text-light text-center px-2 py-1 mx-3 my-1 fs-6' key={data.id} value={data.value}>{data.value}</option>)}
+                        </select>
                     </div>
                     <div className='d-flex justify-content-center align-items-center flex-row'>
                         {graph ? <Line
@@ -199,7 +210,7 @@ export default function Dashboard(value) {
                                 <p className='text-light m-0 px-3 py-1'>{graph ? "Add New Data" : "Graph Data"}</p>
                             </div>
                             <div className='cursorPointer theme-card-dark rounded-2 my-2'>
-                                <p className='text-light m-0 px-3 py-1'>Remove Data</p>
+                                <p onClick={()=> console.log(parametersName.current)} className='text-light m-0 px-3 py-1'>Remove Data</p>
                             </div>
                         </div>
                     </div>

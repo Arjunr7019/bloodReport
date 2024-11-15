@@ -1,8 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import '../../../App.css';
-import { useNavigate } from "react-router-dom";
+import Services from '../../../Services/Services';
+import { UserAuthContext } from '../../../Context/UserAuthContext';
 
 export default function Login() {
+    const{setUserData} = useContext(UserAuthContext);
+
     const [login, setLogin] = useState(true);
     const [dropDown, setDropDown] = useState(false);
     const [passwordvisibility, setPasswordvisibility] = useState(false);
@@ -14,7 +17,6 @@ export default function Login() {
     const [bloodParameterData, setBloodParameterData] = useState("");
     const [bloodParameterDate, setBloodParameterDate] = useState("");
 
-    const navigate = useNavigate();
 
     const bloodParameter = useRef('CRP');
 
@@ -37,7 +39,8 @@ export default function Login() {
         if (response.status === 200) {
             // The user is authenticated.
             let data = await response.json();
-            navigate("/home", { state: { email: data.data.user.email } });
+            await Services.setUserAuth(data)
+            setUserData(data);
         } else {
             // The user is not authenticated.
         }
@@ -86,6 +89,9 @@ export default function Login() {
         if (response.status === 201) {
             // The user is authenticated.
             setLogin(true);
+            let data = await response.json();
+            await Services.setUserAuth(data)
+            setUserData(data);
         } else {
             // The user is not authenticated.
         }
