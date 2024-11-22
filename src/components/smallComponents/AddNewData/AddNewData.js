@@ -1,8 +1,9 @@
-import React from 'react'
+import React from 'react';
+import '../../../App.css';
 
 export default function AddNewData() {
     return (
-        <div className='w-50 d-flex justify-content-start align-items-center my-5'>
+        <div className='w-50 d-flex justify-content-start align-items-center my-5 globalTrasition'>
             <div className='d-flex justify-content-start align-items-center flex-column'>
                 <div className="input-group input-group-sm mb-3">
                     <span className="input-group-text" id="inputGroup-sizing-sm">ESR</span>
