@@ -124,3 +124,7 @@ ul li a {
 .globalTrasition{
   transition: 1s ease-in-out;
 }
+/* .resentActivity{
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+} */

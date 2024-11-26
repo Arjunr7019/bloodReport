@@ -42,8 +42,8 @@ export default function AddNewData() {
     }
 
     return (
-        <div className='w-50 d-flex justify-content-start align-items-center my-5 globalTrasition'>
-            <div className='d-flex justify-content-start align-items-center flex-column'>
+        <div className='w-75 d-flex justify-content-start align-items-start flex-column my-2 globalTrasition ps-3'>
+            <div className='d-flex justify-content-center align-items-center flex-column'>
                 <div className="input-group input-group-sm mb-3">
                     {/* <span className="input-group-text" id="inputGroup-sizing-sm">ESR</span> */}
                     <select onChange={(e) => parametersName.current = e.target.value} className="input-group-text outlineAndBorder d-flex justify-content-center align-items-center">
@@ -56,19 +56,29 @@ export default function AddNewData() {
                         <p className='text-light m-0 px-3 py-1'>ADD</p>
                     </div>
                 </div>
-                {/* <div className="input-group input-group-sm mb-3">
-                    <span className="input-group-text" id="inputGroup-sizing-sm">CRP</span>
-                    <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
-                    <input type="date" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
-                    <div className='cursorPointer theme-card-dark rounded-2'>
-                        <p className='text-light m-0 px-3 py-1'>ADD</p>
-                    </div>
+            </div>
+            <div className='w-100 d-flex justify-content-start align-items-center flex-row mt-3'>
+                <h4 style={{ color: "white" }}>Resent Activity</h4>
+                <select className="input-group-text outlineAndBorder d-flex justify-content-center align-items-center ms-3">
+                    <option className='text-start' value="ESR">ESR</option>
+                    <option className='text-start' value="CRP">CRP</option>
+                </select>
+            </div>
+            <div className='w-100 px-3 py-2 mt-2 d-flex justify-content-between align-items-center flex-row'>
+                <p style={{ color: "white" }} className='m-0'>Parameter Type</p>
+                <p style={{ color: "white" }} className='m-0'>Parameter Value</p>
+                <p style={{ color: "white" }} className='m-0'>Added Date</p>
+            </div>
+            <div style={{ height: "32vh",overflow:"hidden" }} className='w-100 resentActivity'>
+                <div style={{overflowY:"scroll", paddingRight:"17px",boxSizing:"content-box"}} className='w-100 h-100'>
+                    {userData.data.user.parameters.ESR.map((data) =>
+                    (<div className='w-100 theme-card-dark px-3 py-2 mt-2 rounded-2 d-flex justify-content-between align-items-center flex-row'>
+                        <p style={{ color: "white" }} className='m-0'>ESR</p>
+                        <p style={{ color: "white" }} className='m-0'>{data.value}</p>
+                        <p style={{ color: "white" }} className='m-0'>{data.date}</p>
+                    </div>)
+                    )}
                 </div>
-                <div className='cursorPointer theme-card-dark rounded-3 d-flex justify-content-start align-items-center'>
-                    <span className="material-symbols-outlined text-light m-2">
-                        add
-                    </span>
-                </div> */}
             </div>
             <Toaster position="bottom-center" />
         </div>

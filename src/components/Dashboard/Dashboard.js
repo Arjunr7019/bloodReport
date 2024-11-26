@@ -179,7 +179,7 @@ export default function Dashboard() {
                                 </option>)}
                         </select>
                     </div>
-                    <div className='d-flex justify-content-center align-items-center flex-row'>
+                    <div className='d-flex justify-content-between align-items-center flex-row px-3'>
                         {graph ? <Line
                             data={data}
                             options={options}
