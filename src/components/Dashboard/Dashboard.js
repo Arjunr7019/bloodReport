@@ -56,6 +56,7 @@ export default function Dashboard() {
         }]
     }
     const options = {
+        animation: false,
         scales: {
             x: {
                 display: true,
@@ -111,7 +112,7 @@ export default function Dashboard() {
             </div>
 
             <div className='px-5 w-100 d-flex justify-content-between align-items-center flex-row'>
-                <motion.div layoutId='1' className='w-50 me-2 rounded-3 theme-card py-4 d-flex justify-content-evenly align-items-center flex-row'>
+                <motion.div layoutId='1' className={selectedId?'w-50 me-2 rounded-3 theme-card py-4 d-flex justify-content-evenly align-items-center flex-row opacity-0':'w-50 me-2 rounded-3 theme-card py-4 d-flex justify-content-evenly align-items-center flex-row'}>
                     <motion.div className='w-25 rounded-circle'>
                         <motion.img className='w-50 rounded-circle' src={profileImg} alt="profileImg" />
                     </motion.div>
@@ -131,7 +132,7 @@ export default function Dashboard() {
                 </motion.div>
                 <AnimatePresence>
                     {selectedId && (
-                        <motion.div className='cardThemeActive rounded-3 theme-card py-4 ms-5' layoutId={selectedId}>
+                        <motion.div className='cardThemeActive rounded-3 theme-card py-4 ms-5 z-1' layoutId={selectedId}>
                             <motion.div className='w-100 d-flex justify-content-end align-items-center'>
                                 <motion.span className="cursorPointer text-light material-symbols-outlined theme-card-dark rounded-3 p-1"
                                     onClick={() => setSelectedId(null)}>
