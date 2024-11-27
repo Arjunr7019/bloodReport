@@ -44,10 +44,10 @@ export default function Dashboard() {
     // }
 
     const data = {
-        labels: userData.data.user.parameters.ESR.map((data) => data.date),
+        labels: parametersName.current === "ESR" ? userData.data.user.parameters.ESR?.map((data) => data.date) : userData.data.user.parameters.CRP?.map((data) => data.date),
         datasets: [{
-            label: 'ESR',
-            data: userData.data.user.parameters.ESR.map((data) => data.value),
+            label: parametersName.current === "ESR" ? 'ESR':'CRP',
+            data: parametersName.current === "ESR" ? userData.data.user.parameters.ESR?.map((data) => data.value) : userData.data.user.parameters.CRP?.map((data) => data.value),
             backgroundColor: '#296dc0',
             borderColor: '#3690fe',
             pointBorderColor: '#296dc0',

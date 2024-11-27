@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import '../../../App.css';
 import { UserAuthContext } from '../../../Context/UserAuthContext';
 import { Toaster, toast } from 'sonner'
@@ -8,7 +8,13 @@ export default function AddNewData() {
     const { userData, setUserData } = useContext(UserAuthContext);
     const [parameterValue, setParameterValue] = useState('');
     const [bloodParameterDate, setBloodParameterDate] = useState('');
+    const [resentActivity, setResentActivity] = useState();
     const parametersName = useRef('ESR')
+    const resentActivityCard = useRef('ESR')
+
+    useEffect(()=>{
+        resentActivityCard.current === "ESR" ? setResentActivity(userData.data.user.parameters.ESR) : setResentActivity(userData.data.user.parameters.CRP);
+    },[resentActivityCard.current])
 
     const addNewData = async () => {
         let email = userData?.data.user.email
@@ -59,7 +65,7 @@ export default function AddNewData() {
             </div>
             <div className='w-100 d-flex justify-content-start align-items-center flex-row mt-3'>
                 <h4 style={{ color: "white" }}>Resent Activity</h4>
-                <select className="input-group-text outlineAndBorder d-flex justify-content-center align-items-center ms-3">
+                <select onChange={(e)=> resentActivityCard.current = e.target.value} className="input-group-text outlineAndBorder d-flex justify-content-center align-items-center ms-3">
                     <option className='text-start' value="ESR">ESR</option>
                     <option className='text-start' value="CRP">CRP</option>
                 </select>
@@ -71,9 +77,9 @@ export default function AddNewData() {
             </div>
             <div style={{ height: "32vh",overflow:"hidden" }} className='w-100 resentActivity'>
                 <div style={{overflowY:"scroll", paddingRight:"17px",boxSizing:"content-box"}} className='w-100 h-100'>
-                    {userData.data.user.parameters.ESR.map((data) =>
-                    (<div className='w-100 theme-card-dark px-3 py-2 mt-2 rounded-2 d-flex justify-content-between align-items-center flex-row'>
-                        <p style={{ color: "white" }} className='m-0'>ESR</p>
+                    {resentActivity?.map((data,index) =>
+                    (<div key={index} className='w-100 theme-card-dark px-3 py-2 mt-2 rounded-2 d-flex justify-content-between align-items-center flex-row'>
+                        <p style={{ color: "white" }} className='m-0'>{resentActivityCard.current}</p>
                         <p style={{ color: "white" }} className='m-0'>{data.value}</p>
                         <p style={{ color: "white" }} className='m-0'>{data.date}</p>
                     </div>)
