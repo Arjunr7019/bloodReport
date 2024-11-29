@@ -24,7 +24,6 @@ export default function Main() {
       let data = await response.json()
       setUserData(data);
       await Services.setUserAuth(data);
-      console.log(data)
   } else {
       // The user is not authenticated.
   }

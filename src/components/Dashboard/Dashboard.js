@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useRef, useContext, useEffect } from 'react';
 import '../../App.css';
 import profileImg from "../../images/profile.jpg";
 import AddNewData from '../smallComponents/AddNewData/AddNewData';
@@ -33,6 +33,7 @@ export default function Dashboard() {
     const { userData, setUserData } = useContext(UserAuthContext)
 
     const parametersName = useRef("ESR");
+    const sortedDate = useRef();
 
     const parameterValue = [
         { value: "ESR", id: "1" },
@@ -43,11 +44,25 @@ export default function Dashboard() {
     //     return new Date(year, month - 1, day);
     // }
 
+    useEffect(()=>{
+        if(parametersName.current === "ESR"){
+            if(userData.data.user.parameters.ESR){
+                let data = userData.data.user.parameters.ESR
+                sortedDate.current = data.sort((a, b) => new Date(b.date) - new Date(a.date))
+            }
+        }else{
+            if(userData.data.user.parameters.CRP){
+                let data = userData.data.user.parameters.CRP
+                sortedDate.current = data.sort((a, b) => new Date(b.date) - new Date(a.date))
+            }
+        }
+    },[parametersName.current])
+
     const data = {
-        labels: parametersName.current === "ESR" ? userData.data.user.parameters.ESR?.map((data) => data.date) : userData.data.user.parameters.CRP?.map((data) => data.date),
+        labels: sortedDate.current?.map((data) => data.date),
         datasets: [{
             label: parametersName.current === "ESR" ? 'ESR':'CRP',
-            data: parametersName.current === "ESR" ? userData.data.user.parameters.ESR?.map((data) => data.value) : userData.data.user.parameters.CRP?.map((data) => data.value),
+            data: sortedDate.current?.map((data) => data.value),
             backgroundColor: '#296dc0',
             borderColor: '#3690fe',
             pointBorderColor: '#296dc0',
@@ -104,10 +119,10 @@ export default function Dashboard() {
             <div className='my-4 w-100 d-flex justify-content-staet align-items-center flex-row px-5'>
                 <h3 className='text-light'>Dashboard</h3>
                 <div className='theme-card d-flex justify-content-center align-items-center mx-2 rounded-2'>
-                    <p className='text-light text-center mx-3 my-1 fs-6'>{"Last Test: " + userData?.data.user.lastUpdateDate}</p>
+                    <p className='text-light text-center mx-3 my-1 fs-6'>{"Last Test: " + userData?.data.user?.lastUpdateDate}</p>
                 </div>
                 <div className='theme-card d-flex justify-content-center align-items-center mx-2 rounded-2'>
-                    <p className='text-light text-center mx-3 my-1 fs-6'>{"Joined: " + userData?.data.user.joinedDate}</p>
+                    <p className='text-light text-center mx-3 my-1 fs-6'>{"Joined: " + userData?.data.user?.joinedDate}</p>
                 </div>
             </div>
 
@@ -117,9 +132,9 @@ export default function Dashboard() {
                         <motion.img className='w-50 rounded-circle' src={profileImg} alt="profileImg" />
                     </motion.div>
                     <motion.div className='d-flex justify-content-start align-items-center flex-column'>
-                        <motion.h5 className='text-light text-start w-100'>{"Name: " + userData?.data.user.name}</motion.h5>
-                        <motion.p className='text-light text-start w-100 my-0'>{"DOB: " + userData?.data.user.DOB}</motion.p>
-                        <motion.p className='text-light text-start w-100 my-0'>{"Gender: " + userData?.data.user.gender}</motion.p>
+                        <motion.h5 className='text-light text-start w-100'>{"Name: " + userData?.data.user?.name}</motion.h5>
+                        <motion.p className='text-light text-start w-100 my-0'>{"DOB: " + userData?.data.user?.DOB}</motion.p>
+                        <motion.p className='text-light text-start w-100 my-0'>{"Gender: " + userData?.data.user?.gender}</motion.p>
                     </motion.div>
                     <motion.div className='px-2'>
                         <motion.div className='cursorPointer theme-card-dark rounded-2 my-2'>
@@ -145,15 +160,15 @@ export default function Dashboard() {
                             <motion.div className='d-flex justify-content-start align-items-center flex-column mx-3 my-2'>
                                 <motion.div className='w-100 d-flex justify-content-center align-items-center flex-row mb-2'>
                                     <motion.p className='text-light m-0 me-2'>Name:</motion.p>
-                                    <motion.input type='text' placeholder={userData?.data.user.name} className='placeholderColor customInput text-light text-start w-100'></motion.input>
+                                    <motion.input type='text' placeholder={userData?.data.user?.name} className='placeholderColor customInput text-light text-start w-100'></motion.input>
                                 </motion.div>
                                 <motion.div className='w-100 d-flex justify-content-center align-items-center flex-row mb-2'>
                                     <motion.p className='text-light m-0 me-2'>DOB:</motion.p>
-                                    <motion.input type='date' defaultValue={userData?.data.user.DOB} placeholder={userData?.data.user.DOB} className='placeholderColor customInput text-light text-start w-100 my-0'></motion.input>
+                                    <motion.input type='date' defaultValue={userData?.data.user?.DOB} placeholder={userData?.data.user?.DOB} className='placeholderColor customInput text-light text-start w-100 my-0'></motion.input>
                                 </motion.div>
                                 <motion.div className='w-100 d-flex justify-content-center align-items-center flex-row mb-2'>
                                     <motion.p className='text-light m-0 me-2'>Gender</motion.p>
-                                    <motion.input type='text' placeholder={userData?.data.user.gender} className='placeholderColor customInput text-light text-start w-100 my-0'></motion.input>
+                                    <motion.input type='text' placeholder={userData?.data.user?.gender} className='placeholderColor customInput text-light text-start w-100 my-0'></motion.input>
                                 </motion.div>
                             </motion.div>
                             <motion.button className='cursorPointer theme-card-dark rounded-2 my-2 text-light' onClick={() => setSelectedId(null)}>Save</motion.button>
@@ -189,9 +204,9 @@ export default function Dashboard() {
                             <div onClick={() => graph ? setGraph(false) : setGraph(true)} className='cursorPointer theme-card-dark rounded-2 my-2'>
                                 <p className='text-light m-0 px-3 py-1'>{graph ? "Add New Data" : "Graph Data"}</p>
                             </div>
-                            <div className='cursorPointer theme-card-dark rounded-2 my-2'>
+                            {/* <div className='cursorPointer theme-card-dark rounded-2 my-2'>
                                 <p onClick={() => console.log(parametersName.current)} className='text-light m-0 px-3 py-1'>Remove Data</p>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>

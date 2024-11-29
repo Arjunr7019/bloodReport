@@ -3,6 +3,7 @@ import '../../../App.css';
 import { UserAuthContext } from '../../../Context/UserAuthContext';
 import { Toaster, toast } from 'sonner'
 import Services from '../../../Services/Services';
+import trash from '../../../images/bx-trash.svg'
 
 export default function AddNewData() {
     const { userData, setUserData } = useContext(UserAuthContext);
@@ -13,7 +14,18 @@ export default function AddNewData() {
     const resentActivityCard = useRef('ESR')
 
     useEffect(()=>{
-        resentActivityCard.current === "ESR" ? setResentActivity(userData.data.user.parameters.ESR) : setResentActivity(userData.data.user.parameters.CRP);
+        if(resentActivityCard.current === "ESR"){
+            if(userData.data.user.parameters.ESR){
+                let data = userData.data.user.parameters.ESR
+                setResentActivity(data.sort((a, b) => new Date(b.date) - new Date(a.date)))
+            }
+        }else{
+            if(userData.data.user.parameters.CRP){
+                let data = userData.data.user.parameters.CRP
+                setResentActivity(data.sort((a, b) => new Date(b.date) - new Date(a.date)))
+            }
+        }
+        // resentActivityCard.current === "ESR" ? setResentActivity(data.sort((a, b) => new Date(b.date) - new Date(a.date))) : setResentActivity(userData.data.user.parameters.CRP);
     },[resentActivityCard.current])
 
     const addNewData = async () => {
@@ -70,10 +82,11 @@ export default function AddNewData() {
                     <option className='text-start' value="CRP">CRP</option>
                 </select>
             </div>
-            <div className='w-100 px-3 py-2 mt-2 d-flex justify-content-between align-items-center flex-row'>
-                <p style={{ color: "white" }} className='m-0'>Parameter Type</p>
-                <p style={{ color: "white" }} className='m-0'>Parameter Value</p>
-                <p style={{ color: "white" }} className='m-0'>Added Date</p>
+            <div className='w-100  py-2 mt-2 d-flex justify-content-start align-items-center flex-row'>
+                <p style={{ color: "white" }} className='me-auto mb-0'>Parameter Type</p>
+                <p style={{ color: "white" }} className='me-auto mb-0'>Parameter Value</p>
+                <p style={{ color: "white" }} className='me-auto mb-0'>Added Date</p>
+                <p style={{ color: "white" }} className='ms-auto me-3 mb-0'>Modify</p>
             </div>
             <div style={{ height: "32vh",overflow:"hidden" }} className='w-100 resentActivity'>
                 <div style={{overflowY:"scroll", paddingRight:"17px",boxSizing:"content-box"}} className='w-100 h-100'>
@@ -82,6 +95,7 @@ export default function AddNewData() {
                         <p style={{ color: "white" }} className='m-0'>{resentActivityCard.current}</p>
                         <p style={{ color: "white" }} className='m-0'>{data.value}</p>
                         <p style={{ color: "white" }} className='m-0'>{data.date}</p>
+                        <img style={{cursor:"pointer"}} src={trash} alt="trash" />
                     </div>)
                     )}
                 </div>

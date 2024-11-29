@@ -67,7 +67,8 @@ export default function Login() {
         let password = passwordValue;
         let gender = genderValue;
         let DOB = DOBValue;
-        let parametersType = bloodParameter.current;
+        let parametersType ;
+        bloodParameterData === "" ? parametersType = "" : parametersType = bloodParameter.current
         let parameterValue = bloodParameterData;
         const today = new Date();
         // const date = today.getDate();
