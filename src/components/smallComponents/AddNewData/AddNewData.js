@@ -4,6 +4,7 @@ import { UserAuthContext } from '../../../Context/UserAuthContext';
 import { Toaster, toast } from 'sonner'
 import Services from '../../../Services/Services';
 import trash from '../../../images/bx-trash.svg'
+import sad from '../../../images/bx-sad.svg'
 
 export default function AddNewData() {
     const { userData, setUserData } = useContext(UserAuthContext);
@@ -13,20 +14,20 @@ export default function AddNewData() {
     const parametersName = useRef('ESR')
     const resentActivityCard = useRef('ESR')
 
-    useEffect(()=>{
-        if(resentActivityCard.current === "ESR"){
-            if(userData.data.user.parameters.ESR){
+    useEffect(() => {
+        if (resentActivityCard.current === "ESR") {
+            if (userData.data.user.parameters.ESR) {
                 let data = userData.data.user.parameters.ESR
                 setResentActivity(data.sort((a, b) => new Date(b.date) - new Date(a.date)))
             }
-        }else{
-            if(userData.data.user.parameters.CRP){
+        } else {
+            if (userData.data.user.parameters.CRP) {
                 let data = userData.data.user.parameters.CRP
                 setResentActivity(data.sort((a, b) => new Date(b.date) - new Date(a.date)))
             }
         }
         // resentActivityCard.current === "ESR" ? setResentActivity(data.sort((a, b) => new Date(b.date) - new Date(a.date))) : setResentActivity(userData.data.user.parameters.CRP);
-    },[resentActivityCard.current])
+    }, [resentActivityCard.current])
 
     const addNewData = async () => {
         let email = userData?.data.user.email
@@ -77,29 +78,34 @@ export default function AddNewData() {
             </div>
             <div className='w-100 d-flex justify-content-start align-items-center flex-row mt-3'>
                 <h4 style={{ color: "white" }}>Resent Activity</h4>
-                <select onChange={(e)=> resentActivityCard.current = e.target.value} className="input-group-text outlineAndBorder d-flex justify-content-center align-items-center ms-3">
+                <select onChange={(e) => resentActivityCard.current = e.target.value} className="input-group-text outlineAndBorder d-flex justify-content-center align-items-center ms-3">
                     <option className='text-start' value="ESR">ESR</option>
                     <option className='text-start' value="CRP">CRP</option>
                 </select>
             </div>
-            <div className='w-100  py-2 mt-2 d-flex justify-content-start align-items-center flex-row'>
-                <p style={{ color: "white" }} className='me-auto mb-0'>Parameter Type</p>
-                <p style={{ color: "white" }} className='me-auto mb-0'>Parameter Value</p>
-                <p style={{ color: "white" }} className='me-auto mb-0'>Added Date</p>
-                <p style={{ color: "white" }} className='ms-auto me-3 mb-0'>Modify</p>
-            </div>
-            <div style={{ height: "32vh",overflow:"hidden" }} className='w-100 resentActivity'>
-                <div style={{overflowY:"scroll", paddingRight:"17px",boxSizing:"content-box"}} className='w-100 h-100'>
-                    {resentActivity?.map((data,index) =>
-                    (<div key={index} className='w-100 theme-card-dark px-3 py-2 mt-2 rounded-2 d-flex justify-content-between align-items-center flex-row'>
-                        <p style={{ color: "white" }} className='m-0'>{resentActivityCard.current}</p>
-                        <p style={{ color: "white" }} className='m-0'>{data.value}</p>
-                        <p style={{ color: "white" }} className='m-0'>{data.date}</p>
-                        <img style={{cursor:"pointer"}} src={trash} alt="trash" />
-                    </div>)
-                    )}
+            {resentActivity ? <>
+                <div className='w-100  py-2 mt-2 d-flex justify-content-start align-items-center flex-row'>
+                    <p style={{ color: "white" }} className='me-auto mb-0'>Parameter Type</p>
+                    <p style={{ color: "white" }} className='me-auto mb-0'>Parameter Value</p>
+                    <p style={{ color: "white" }} className='me-auto mb-0'>Added Date</p>
+                    <p style={{ color: "white" }} className='ms-auto me-3 mb-0'>Modify</p>
                 </div>
-            </div>
+                <div style={{ height: "32vh", overflow: "hidden" }} className='w-100 resentActivity'>
+                    <div style={{ overflowY: "scroll", paddingRight: "17px", boxSizing: "content-box" }} className='w-100 h-100'>
+                        {resentActivity?.map((data, index) =>
+                        (<div key={index} className='w-100 theme-card-dark px-3 py-2 mt-2 rounded-2 d-flex justify-content-between align-items-center flex-row'>
+                            <p style={{ color: "white" }} className='m-0'>{resentActivityCard.current}</p>
+                            <p style={{ color: "white" }} className='m-0'>{data.value}</p>
+                            <p style={{ color: "white" }} className='m-0'>{data.date}</p>
+                            <img style={{ cursor: "pointer" }} src={trash} alt="trash" />
+                        </div>)
+                        )}
+                    </div>
+                </div>
+            </> : <div style={{ height: "39vh" }} className='w-100 d-flex justify-content-center align-items-center flex-column'>
+                <img src={sad} alt="sad" />
+                <p style={{ color: "white" }}>Empty Parameter, Add values</p>
+            </div>}
             <Toaster position="bottom-center" />
         </div>
     )
