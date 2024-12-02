@@ -5,6 +5,7 @@ import AddNewData from '../smallComponents/AddNewData/AddNewData';
 import { motion, AnimatePresence } from "framer-motion";
 import { UserAuthContext } from '../../Context/UserAuthContext';
 import { Line } from 'react-chartjs-2';
+import wellnessScoreImage from '../../images/bgWellnessCard.png'
 import {
     Chart as Chartjs,
     LineElement,
@@ -15,6 +16,7 @@ import {
     Tooltip
 } from 'chart.js';
 import Services from '../../Services/Services';
+import { color } from 'chart.js/helpers';
 
 Chartjs.register(
     LineElement,
@@ -44,24 +46,25 @@ export default function Dashboard() {
     //     return new Date(year, month - 1, day);
     // }
 
-    useEffect(()=>{
-        if(parametersName.current === "ESR"){
-            if(userData.data.user.parameters.ESR){
+    useEffect(() => {
+        if (parametersName.current === "ESR") {
+            if (userData.data.user.parameters.ESR) {
                 let data = userData.data.user.parameters.ESR
                 sortedDate.current = data.sort((a, b) => new Date(b.date) - new Date(a.date))
             }
-        }else{
-            if(userData.data.user.parameters.CRP){
+        } else {
+            if (userData.data.user.parameters.CRP) {
                 let data = userData.data.user.parameters.CRP
                 sortedDate.current = data.sort((a, b) => new Date(b.date) - new Date(a.date))
             }
         }
-    },[parametersName.current])
+    }, [parametersName.current])
 
     const data = {
         labels: sortedDate.current?.map((data) => data.date),
         datasets: [{
-            label: parametersName.current === "ESR" ? 'ESR':'CRP',
+            label: parametersName.current === "ESR" ? 'ESR' : 'CRP',
+            color:"white",
             data: sortedDate.current?.map((data) => data.value),
             backgroundColor: '#296dc0',
             borderColor: '#3690fe',
@@ -106,6 +109,9 @@ export default function Dashboard() {
         plugins: {
             legend: {
                 display: true,
+                labels: {
+                    color: 'white' // Set the color of the legend labels
+                }
             },
             tooltip: {
                 enabled: true
@@ -127,7 +133,7 @@ export default function Dashboard() {
             </div>
 
             <div className='px-5 w-100 d-flex justify-content-between align-items-center flex-row'>
-                <motion.div layoutId='1' className={selectedId?'w-50 me-2 rounded-3 theme-card py-4 d-flex justify-content-evenly align-items-center flex-row opacity-0':'w-50 me-2 rounded-3 theme-card py-4 d-flex justify-content-evenly align-items-center flex-row'}>
+                <motion.div layoutId='1' className={selectedId ? 'w-50 me-2 rounded-3 theme-card py-4 d-flex justify-content-evenly align-items-center flex-row opacity-0' : 'w-50 me-2 rounded-3 theme-card py-4 d-flex justify-content-evenly align-items-center flex-row'}>
                     <motion.div className='w-25 rounded-circle'>
                         <motion.img className='w-50 rounded-circle' src={profileImg} alt="profileImg" />
                     </motion.div>
@@ -176,10 +182,15 @@ export default function Dashboard() {
                     )}
                 </AnimatePresence>
 
-                <div className='w-50 rounded-3 bgWellnessCard theme-card py-4'>
+                <div style={{position:"relative",height:"100%",overflow:"hidden"}} className='bgWellnessCard w-50 rounded-3 theme-card py-4'>
+                    <img style={{position:"absolute",zIndex:0,left:0,top:0,width:"100%"}} className='bgWellnessCardImg' src={wellnessScoreImage} alt="img" />
+                    <h2 style={{position:"relative",cursor:"context-menu"}} className='text-light'>Wellness Score</h2>
+                    <h3 style={{position:"relative",cursor:"context-menu"}} className='text-light'>80%</h3>
+                </div>
+                {/* <div className='w-50 rounded-3 bgWellnessCard theme-card py-4'>
                     <h2 className='text-light'>Wellness Score</h2>
                     <h3 className='text-light'>80%</h3>
-                </div>
+                </div> */}
             </div>
 
             <div className='w-100 mt-2'>
