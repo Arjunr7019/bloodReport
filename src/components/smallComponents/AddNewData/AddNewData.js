@@ -11,11 +11,11 @@ export default function AddNewData() {
     const [parameterValue, setParameterValue] = useState('');
     const [bloodParameterDate, setBloodParameterDate] = useState('');
     const [resentActivity, setResentActivity] = useState();
-    const parametersName = useRef('ESR')
-    const resentActivityCard = useRef('ESR')
+    const [parametersName, setParameterName] = useState("ESR");
+    const [resentActivityCard, setResentActivityCard] = useState("ESR");
 
     useEffect(() => {
-        if (resentActivityCard.current === "ESR") {
+        if (resentActivityCard === "ESR") {
             if (userData.data.user.parameters.ESR) {
                 let data = userData.data.user.parameters.ESR
                 setResentActivity(data.sort((a, b) => new Date(b.date) - new Date(a.date)))
@@ -29,11 +29,11 @@ export default function AddNewData() {
             }
         }
         // resentActivityCard.current === "ESR" ? setResentActivity(data.sort((a, b) => new Date(b.date) - new Date(a.date))) : setResentActivity(userData.data.user.parameters.CRP);
-    }, [resentActivityCard.current])
+    }, [resentActivityCard])
 
     const addNewData = async () => {
         let email = userData?.data.user.email
-        let parametersType = parametersName.current
+        let parametersType = parametersName
         if (parameterValue === "" || bloodParameterDate === "") {
             toast.error('parameters are empty')
         } else {
@@ -67,7 +67,7 @@ export default function AddNewData() {
             <div className='d-flex justify-content-center align-items-center flex-column'>
                 <div className="input-group input-group-sm mb-3">
                     {/* <span className="input-group-text" id="inputGroup-sizing-sm">ESR</span> */}
-                    <select onChange={(e) => parametersName.current = e.target.value} className="input-group-text outlineAndBorder d-flex justify-content-center align-items-center">
+                    <select onChange={(e) => setParameterName(e.target.value)} className="input-group-text outlineAndBorder d-flex justify-content-center align-items-center">
                         <option className='text-start' value="ESR">ESR</option>
                         <option className='text-start' value="CRP">CRP</option>
                     </select>
@@ -80,7 +80,7 @@ export default function AddNewData() {
             </div>
             <div className='w-100 d-flex justify-content-start align-items-center flex-row mt-3'>
                 <h4 style={{ color: "white" }}>Resent Activity</h4>
-                <select onChange={(e) => resentActivityCard.current = e.target.value} className="input-group-text outlineAndBorder d-flex justify-content-center align-items-center ms-3">
+                <select onChange={(e) => setResentActivityCard(e.target.value)} className="input-group-text outlineAndBorder d-flex justify-content-center align-items-center ms-3">
                     <option className='text-start' value="ESR">ESR</option>
                     <option className='text-start' value="CRP">CRP</option>
                 </select>
@@ -96,7 +96,7 @@ export default function AddNewData() {
                     <div style={{ overflowY: "scroll", paddingRight: "17px", boxSizing: "content-box" }} className='w-100 h-100'>
                         {resentActivity?.map((data, index) =>
                         (<div key={index} className='w-100 theme-card-dark px-3 py-2 mt-2 rounded-2 d-flex justify-content-between align-items-center flex-row'>
-                            <p style={{ color: "white" }} className='m-0'>{resentActivityCard.current}</p>
+                            <p style={{ color: "white" }} className='m-0'>{resentActivityCard}</p>
                             <p style={{ color: "white" }} className='m-0'>{data.value}</p>
                             <p style={{ color: "white" }} className='m-0'>{data.date}</p>
                             <img style={{ cursor: "pointer" }} src={trash} alt="trash" />
