@@ -24,6 +24,8 @@ export default function AddNewData() {
             if (userData.data.user.parameters.CRP) {
                 let data = userData.data.user.parameters.CRP
                 setResentActivity(data.sort((a, b) => new Date(b.date) - new Date(a.date)))
+            }else{
+                setResentActivity()
             }
         }
         // resentActivityCard.current === "ESR" ? setResentActivity(data.sort((a, b) => new Date(b.date) - new Date(a.date))) : setResentActivity(userData.data.user.parameters.CRP);

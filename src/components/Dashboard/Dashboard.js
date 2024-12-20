@@ -56,6 +56,8 @@ export default function Dashboard() {
             if (userData.data.user.parameters.CRP) {
                 let data = userData.data.user.parameters.CRP
                 sortedDate.current = data.sort((a, b) => new Date(b.date) - new Date(a.date))
+            }else{
+                sortedDate.current = null
             }
         }
     }, [parametersName.current])
