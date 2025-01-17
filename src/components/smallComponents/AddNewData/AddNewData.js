@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import '../../../App.css';
 import { UserAuthContext } from '../../../Context/UserAuthContext';
 import { Toaster, toast } from 'sonner'
@@ -24,12 +24,39 @@ export default function AddNewData() {
             if (userData.data.user.parameters.CRP) {
                 let data = userData.data.user.parameters.CRP
                 setResentActivity(data.sort((a, b) => new Date(b.date) - new Date(a.date)))
-            }else{
+            } else {
                 setResentActivity()
             }
         }
         // resentActivityCard.current === "ESR" ? setResentActivity(data.sort((a, b) => new Date(b.date) - new Date(a.date))) : setResentActivity(userData.data.user.parameters.CRP);
-    }, [resentActivityCard])
+    }, [resentActivityCard, userData])
+
+    const deleteParmeterValue = async (type, value, date) => {
+        console.log(`${type} ${value} ${date}`)
+        let email = userData?.data.user.email
+        const response = await fetch('https://bloodreport-server.onrender.com/api/DeleteData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email,
+                type,
+                value,
+                date
+            })
+        });
+        if (response.status === 200) {
+            // The user is authenticated.
+            toast.success('Parameter Deleted Sucessfully')
+            let data = await response.json()
+            setUserData(data);
+            await Services.setUserAuth(data);
+        } else {
+            // The user is not authenticated.
+            toast.error("Can't Deleted Parameter, try after some times.....")
+        }
+    }
 
     const addNewData = async () => {
         let email = userData?.data.user.email
@@ -99,7 +126,7 @@ export default function AddNewData() {
                             <p style={{ color: "white" }} className='m-0'>{resentActivityCard}</p>
                             <p style={{ color: "white" }} className='m-0'>{data.value}</p>
                             <p style={{ color: "white" }} className='m-0'>{data.date}</p>
-                            <img style={{ cursor: "pointer" }} src={trash} alt="trash" />
+                            <img style={{ cursor: "pointer" }} src={trash} onClick={() => deleteParmeterValue(resentActivityCard, data.value, data.date)} alt="trash" />
                         </div>)
                         )}
                     </div>
