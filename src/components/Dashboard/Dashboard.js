@@ -4,9 +4,10 @@ import profileImg from "../../images/profile.jpg";
 import AddNewData from '../smallComponents/AddNewData/AddNewData';
 import { motion, AnimatePresence } from "framer-motion";
 import { UserAuthContext } from '../../Context/UserAuthContext';
-import { Line } from 'react-chartjs-2';
 import wellnessScoreImage from '../../images/bgWellnessCard.png';
 import { MenuContext } from '../../Context/MenuContext';
+import Services from '../../Services/Services';
+import { Line } from 'react-chartjs-2';
 import {
     Chart as Chartjs,
     LineElement,
@@ -16,9 +17,6 @@ import {
     Legend,
     Tooltip
 } from 'chart.js';
-import Services from '../../Services/Services';
-// import { color } from 'chart.js/helpers';
-
 Chartjs.register(
     LineElement,
     CategoryScale,
@@ -27,6 +25,7 @@ Chartjs.register(
     Legend,
     Tooltip
 )
+// import { color } from 'chart.js/helpers';
 
 
 export default function Dashboard() {
