@@ -1,13 +1,16 @@
-:root{
+:root {
   --theme-bg-color: #4B4B4B;
 }
+
 .App {
   text-align: center;
 }
-.width-35{
+
+.width-35 {
   width: 35% !important;
 }
-.placeholderColor::placeholder{
+
+.placeholderColor::placeholder {
   color: white;
 }
 
@@ -27,11 +30,12 @@
   background-color: #4B4B4B;
 }
 
-.bgWellnessCardImg{
+.bgWellnessCardImg {
   transform: scale(1);
   transition: .4s ease-in-out;
 }
-.bgWellnessCard:hover .bgWellnessCardImg{
+
+.bgWellnessCard:hover .bgWellnessCardImg {
   /* background-image: url("./images/bgWellnessCard.png");
   background-repeat: no-repeat;
   background-size: cover; */
@@ -122,45 +126,67 @@ ul li a {
   right: 14px;
   color: #616161;
 }
-.dropDownBorder{
+
+.dropDownBorder {
   border-radius: 6px 0 0 6px !important;
 }
-.outlineAndBorder{
+
+.outlineAndBorder {
   outline: none;
   border: none;
 }
 
-.globalTrasition{
+.globalTrasition {
   transition: 1s ease-in-out;
 }
+
 /* .resentActivity{
   overflow-y: scroll;
   scroll-behavior: smooth;
 } */
- .mobileScreen{
+.mobileScreen {
   background-color: var(--theme-bg-color);
   height: 100dvh;
- }
- nav span{
+}
+
+nav span {
   height: 3px;
   width: 30px;
   background-color: white;
   border-radius: 1rem;
   margin: 2px 0;
- }
- /* nav span:nth-child(0){
+}
+
+/* nav span:nth-child(0){
   height: 5px;
   width: 40px;
   background-color: black;
   border-radius: 1rem;
  } */
 
- .mobileScreen-graph{
+.navBar {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.menuModal{
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid #ffffff4d;
+}
+.mobileScreen-graph {
   width: 50% !important;
   height: 100% !important;
- }
- @media only screen and (max-width: 600px) {
-  .mobileScreen-graph{
+}
+
+@media only screen and (max-width: 600px) {
+  .mobileScreen-graph {
     width: 100% !important;
   }
 }

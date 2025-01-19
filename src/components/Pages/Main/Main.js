@@ -7,6 +7,8 @@ import { MenuContext } from '../../../Context/MenuContext';
 import userIcon from '../../../images/profile.jpg';
 import wellnessScoreImage from '../../../images/bgWellnessCard.png';
 import PerformanceTrack from '../../smallComponents/PerformanceTrack';
+import logo from '../../../images/bloodReport.png';
+import dashboardIcon from '../../../images/bxs-dashboard.svg';
 
 export default function Main() {
   const [serverUp, setServerUp] = useState(false);
@@ -61,21 +63,26 @@ export default function Main() {
             </div>
             <div className='mobileScreen d-flex d-xl-none align-items-center flex-column w-100'>
               {/* navBar section */}
-              <div className='d-flex justify-content-between align-items-center flex-row w-100 px-4 py-3' style={{ height: "10%" }}>
-                <div className='d-flex justify-content-end align-items-center'>
-                  <img className='rounded-circle' style={{ width: "2.5rem" }} src={userIcon} alt="icon" />
-                  <p className='m-0 px-2' style={{ color: "white" }}>{userData?.data.user?.name}</p>
+              <div className='d-flex justify-content-center align-items-center flex-row w-100 px-4 py-3'>
+                <div className='navBar w-100 d-flex justify-content-between align-items-center flex-row px-2 py-3'>
+                  <div>
+                    <img style={{ width: "6rem" }} src={logo} alt="logo" />
+                  </div>
+                  <div className='d-flex justify-content-end align-items-center pe-1'>
+                    <p className='m-0 px-2' style={{ color: "white" }}>{userData?.data.user?.name}</p>
+                    <img className='rounded-circle' style={{ width: "2.5rem" }} src={userIcon} alt="icon" />
+                  </div>
+                  {/* <nav className='d-flex flex-column'>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </nav> */}
                 </div>
-                <nav className='d-flex flex-column'>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </nav>
               </div>
 
               {/* dashboard title, lastUpdate and joind date card */}
               <div className='d-flex justify-content-start px-4 flex-column w-100'>
-                <h1 className='mb-2 fw-medium text-start' style={{ color: "white" }}>Dashboard</h1>
+                <h1 className='mb-2 fw-medium text-start' style={{ color: "white", fontSize: "2rem" }}>Dashboard</h1>
                 <div className='d-flex justify-content-between flex-row'>
                   <div className='theme-card d-flex justify-content-center align-items-center mb-2 me-2 rounded-2 w-50'>
                     <p className='text-light text-center mx-3 my-1 fs-6'>{"Last Test: " + userData?.data.user?.lastUpdateDate}</p>
@@ -98,6 +105,19 @@ export default function Main() {
 
                 {/* performence track section */}
                 <PerformanceTrack />
+
+                <div className='d-flex justify-content-center align-items-center w-100' style={{ position: "absolute", bottom: "2rem" }}>
+                  <div className='menuModal d-flex justify-content-evenly align-items p-2' style={{ width: "fit-content" }}>
+                    <div className='rounded-3 p-2' style={{border: "1px solid #ffffff4d"}}>
+                      <img style={{ width: "2rem" }} src={dashboardIcon} alt="icon" />
+                      <p className='m-0' style={{fontSize:"80%",color:"white"}}>Dashboard</p>
+                    </div>
+                    <div className='rounded-3 p-2'>
+                      <img style={{ width: "2rem" }} src={dashboardIcon} alt="icon" />
+                      <p className='m-0' style={{fontSize:"80%",color:"white"}}>Add Value</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </MenuContext.Provider>
