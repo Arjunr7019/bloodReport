@@ -14,7 +14,8 @@ import addValueIcon from '../../../images/bxs-add-to-queue.svg';
 export default function Main() {
   const [serverUp, setServerUp] = useState(false);
   const { userData, setUserData } = useContext(UserAuthContext);
-  const [menuData, setMenuData] = useState({"Dashboard":true,"AddParameter":false});
+  const [menuData, setMenuData] = useState({ "Dashboard": true, "AddParameter": false });
+  const [logoutButton, setLogoutButton] = useState(false);
 
   const updataUserData = async () => {
     let email = userData?.data.user.email;
@@ -65,19 +66,26 @@ export default function Main() {
             <div className='mobileScreen d-flex d-xl-none align-items-center flex-column w-100'>
               {/* navBar section */}
               <div className='d-flex justify-content-center align-items-center flex-row w-100 px-4 py-3'>
-                <div className='navBar w-100 d-flex justify-content-between align-items-center flex-row px-2 py-3'>
-                  <div>
-                    <img style={{ width: "6rem" }} src={logo} alt="logo" />
-                  </div>
-                  <div className='d-flex justify-content-end align-items-center pe-1'>
-                    <p className='m-0 px-2' style={{ color: "white" }}>{userData?.data.user?.name}</p>
-                    <img className='rounded-circle' style={{ width: "2.5rem" }} src={userIcon} alt="icon" />
-                  </div>
-                  {/* <nav className='d-flex flex-column'>
+                <div className='navBar w-100 d-flex justify-content-center align-items-start flex-column px-2 py-3'>
+                  <div className='w-100 d-flex justify-content-between align-items-start flex-row'>
+                    <div className="my-auto">
+                      <img style={{ width: "6rem" }} src={logo} alt="logo" />
+                    </div>
+                    <div className='d-flex justify-content-end align-items-center flex-column pe-1'>
+                      <div onClick={() => logoutButton ? setLogoutButton(false) : setLogoutButton(true)} className='d-flex justify-content-end align-items-center'>
+                        <p className='m-0 px-2' style={{ color: "white" }}>{userData?.data.user?.name}</p>
+                        <img className='rounded-circle' style={{ width: "2.5rem" }} src={userIcon} alt="icon" />
+                      </div>
+                    </div>
+                    {/* <nav className='d-flex flex-column'>
                     <span></span>
                     <span></span>
                     <span></span>
                   </nav> */}
+                  </div>
+                  <div className='w-100 d-flex justify-content-end align-items-center pe-4'>
+                    {logoutButton ? <p onClick={() => { Services.Logout(); setUserData(null) }} className='m-0 navBar px-2 mt-2' style={{ color: "white" }}>Logout</p> : <></>}
+                  </div>
                 </div>
               </div>
 
@@ -91,7 +99,7 @@ export default function Main() {
                   <div className='theme-card d-flex justify-content-center align-items-center mb-2 rounded-2 w-50'>
                     <p className='text-light text-center mx-3 my-1 fs-6'>{"Joined: " + userData?.data.user?.joinedDate}</p>
                   </div>
-                </div> :<></>}
+                </div> : <></>}
               </div>
 
               <div className='w-100 d-flex flex-column'>
@@ -109,13 +117,13 @@ export default function Main() {
 
                 <div className='d-flex justify-content-center align-items-center w-100' style={{ position: "absolute", bottom: "2rem" }}>
                   <div className='menuModal d-flex justify-content-evenly align-items p-2' style={{ width: "fit-content" }}>
-                    <div className='rounded-3 p-2' onClick={()=> setMenuData({"Dashboard":true,"AddParameter":false})} style={menuData.Dashboard ? {border: "1px solid #ffffff4d"} : {}}>
+                    <div className='rounded-3 p-2' onClick={() => setMenuData({ "Dashboard": true, "AddParameter": false })} style={menuData.Dashboard ? { border: "1px solid #ffffff4d" } : {}}>
                       <img style={{ width: "2rem" }} src={dashboardIcon} alt="icon" />
-                      <p className='m-0' style={{fontSize:"80%",color:"white"}}>Dashboard</p>
+                      <p className='m-0' style={{ fontSize: "80%", color: "white" }}>Dashboard</p>
                     </div>
-                    <div className='rounded-3 p-2' onClick={()=> setMenuData({"Dashboard":false,"AddParameter":true})} style={menuData.Dashboard ? {} : {border: "1px solid #ffffff4d"}}>
+                    <div className='rounded-3 p-2' onClick={() => setMenuData({ "Dashboard": false, "AddParameter": true })} style={menuData.Dashboard ? {} : { border: "1px solid #ffffff4d" }}>
                       <img style={{ width: "2rem" }} src={addValueIcon} alt="icon" />
-                      <p className='m-0' style={{fontSize:"80%",color:"white"}}>Add Value</p>
+                      <p className='m-0' style={{ fontSize: "80%", color: "white" }}>Add Value</p>
                     </div>
                   </div>
                 </div>
