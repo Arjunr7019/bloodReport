@@ -123,10 +123,10 @@ export default function Login() {
         <div>
             {serverUp ?
                 <div className='theme-card-dark min-vw-100 min-vh-100 d-flex justify-content-center align-items-center'>
-                    <div className={login ? 'theme-card width-35 py-4 rounded-4 d-flex justify-content-center align-items-center flex-column' : 'theme-card w-50 px-5 py-4 rounded-4 d-flex justify-content-center align-items-center flex-column'}>
+                    <div className={login ? 'theme-card width-35 py-4 rounded-4 d-flex justify-content-center align-items-center flex-column px-3 px-md-5' : 'theme-card width-60 px-3 px-md-5 py-4 rounded-4 d-flex justify-content-center align-items-center flex-column'}>
                         <h2 className='text-light mb-4'>{login ? 'Login' : 'Sign Up'}</h2>
-                        <div className='w-100 d-flex justify-content-center align-items-center flex-row'>
-                            <div className={login ? 'w-75' : 'w-100'}>
+                        <div className='w-100 d-flex justify-content-center align-items-center flex-column flex-md-row'>
+                            <div className="w-100">
                                 {login ? <></> : <div className="mb-3">
                                     <label htmlFor="nameId" className="form-label w-100 text-start text-light">Name</label>
                                     <input onChange={(e) => setNameValue(e.target.value)} value={nameValue} type="name" className="form-control" id="nameId" placeholder="Name" />
@@ -144,7 +144,7 @@ export default function Login() {
                                 </div>
 
                             </div>
-                            {login ? <></> : <div className='w-100 ms-4'>
+                            {login ? <></> : <div className='w-100 ms-0 ms-md-4'>
                                 <div className="mb-3">
                                     <label htmlFor="gender" className="form-label w-100 text-start text-light">Gender</label>
                                     <input onChange={(e) => setGenderValue(e.target.value)} value={genderValue} type="text" className="form-control" id="gender" placeholder="Male or Female and others" />
@@ -182,7 +182,7 @@ export default function Login() {
                             <a className='text-light mx-1' href="/" onClick={(e) => e.preventDefault()}>Rest</a>
                         </div>
                         <div className='w-100 d-flex justify-content-center align-items-center'>
-                            <div onClick={loginSignup} className='cursorPointer w-25 theme-card-dark px-3 py-2 text-light rounded-3'>{login ? 'Login' : 'Sign Up'}</div>
+                            <div onClick={loginSignup} className='cursorPointer theme-card-dark px-3 py-2 text-light rounded-3'>{login ? 'Login' : 'Sign Up'}</div>
                         </div>
                     </div>
                 </div> :

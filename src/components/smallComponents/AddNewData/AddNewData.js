@@ -90,7 +90,7 @@ export default function AddNewData() {
     }
 
     return (
-        <div className='w-75 d-flex justify-content-start align-items-start flex-column my-2 globalTrasition ps-3'>
+        <div className='w-100 d-flex justify-content-start align-items-start flex-column my-2 globalTrasition ps-3'>
             <div className='d-flex justify-content-center align-items-center flex-column'>
                 <div className="input-group input-group-sm mb-3">
                     {/* <span className="input-group-text" id="inputGroup-sizing-sm">ESR</span> */}
@@ -99,7 +99,7 @@ export default function AddNewData() {
                         <option className='text-start' value="CRP">CRP</option>
                     </select>
                     <input type="text" value={parameterValue} onChange={(e) => setParameterValue(e.target.value)} className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
-                    <input type="date" value={bloodParameterDate} onChange={(e) => setBloodParameterDate(e.target.value)} className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                    <input type="date" placeholder='date' value={bloodParameterDate} onChange={(e) => setBloodParameterDate(e.target.value)} className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
                     <div onClick={addNewData} className='cursorPointer theme-card-dark rounded-2'>
                         <p className='text-light m-0 px-3 py-1'>ADD</p>
                     </div>
@@ -113,11 +113,15 @@ export default function AddNewData() {
                 </select>
             </div>
             {resentActivity ? <>
-                <div className='w-100  py-2 mt-2 d-flex justify-content-start align-items-center flex-row'>
-                    <p style={{ color: "white" }} className='me-auto mb-0'>Parameter Type</p>
-                    <p style={{ color: "white" }} className='me-auto mb-0'>Parameter Value</p>
-                    <p style={{ color: "white" }} className='me-auto mb-0'>Added Date</p>
-                    <p style={{ color: "white" }} className='ms-auto me-3 mb-0'>Modify</p>
+                <div className='w-100 py-2 mt-2 d-flex justify-content-start align-items-center flex-row'>
+                    {/* <p style={{ color: "white" }} className='mb-0'>Parameter Type</p>
+                    <p style={{ color: "white" }} className='mb-0'>Parameter Value</p>
+                    <p style={{ color: "white" }} className='mb-0'>Added Date</p>
+                    <p style={{ color: "white" }} className='mb-0'>Modify</p> */}
+                    <p style={{ color: "white" }} className='me-auto mb-0'>Type</p>
+                    <p style={{ color: "white" }} className='me-auto mb-0'>Value</p>
+                    <p style={{ color: "white" }} className='me-auto mb-0'>Date</p>
+                    <p style={{ color: "white" }} className='ms-4 me-2 me-sm-4 mb-0'>Modify</p>
                 </div>
                 <div style={{ height: "32vh", overflow: "hidden" }} className='w-100 resentActivity'>
                     <div style={{ overflowY: "scroll", paddingRight: "17px", boxSizing: "content-box" }} className='w-100 h-100'>

@@ -9,11 +9,12 @@ import wellnessScoreImage from '../../../images/bgWellnessCard.png';
 import PerformanceTrack from '../../smallComponents/PerformanceTrack';
 import logo from '../../../images/bloodReport.png';
 import dashboardIcon from '../../../images/bxs-dashboard.svg';
+import addValueIcon from '../../../images/bxs-add-to-queue.svg';
 
 export default function Main() {
   const [serverUp, setServerUp] = useState(false);
   const { userData, setUserData } = useContext(UserAuthContext);
-  const [menuData, setMenuData] = useState(null);
+  const [menuData, setMenuData] = useState({"Dashboard":true,"AddParameter":false});
 
   const updataUserData = async () => {
     let email = userData?.data.user.email;
@@ -82,38 +83,38 @@ export default function Main() {
 
               {/* dashboard title, lastUpdate and joind date card */}
               <div className='d-flex justify-content-start px-4 flex-column w-100'>
-                <h1 className='mb-2 fw-medium text-start' style={{ color: "white", fontSize: "2rem" }}>Dashboard</h1>
-                <div className='d-flex justify-content-between flex-row'>
+                <h1 className='mb-2 fw-medium text-start' style={{ color: "white", fontSize: "2rem" }}>{menuData.Dashboard ? "Dashboard" : "Add Value"}</h1>
+                {menuData.Dashboard ? <div className='d-flex justify-content-between flex-row'>
                   <div className='theme-card d-flex justify-content-center align-items-center mb-2 me-2 rounded-2 w-50'>
                     <p className='text-light text-center mx-3 my-1 fs-6'>{"Last Test: " + userData?.data.user?.lastUpdateDate}</p>
                   </div>
                   <div className='theme-card d-flex justify-content-center align-items-center mb-2 rounded-2 w-50'>
                     <p className='text-light text-center mx-3 my-1 fs-6'>{"Joined: " + userData?.data.user?.joinedDate}</p>
                   </div>
-                </div>
+                </div> :<></>}
               </div>
 
               <div className='w-100 d-flex flex-column'>
                 {/* wellness card */}
-                <div className='px-4 w-100'>
+                {menuData.Dashboard ? <div className='px-4 w-100'>
                   <div style={{ position: "relative", overflow: "hidden" }} className='bgWellnessCard w-100 rounded-3 theme-card py-4'>
                     <img style={{ position: "absolute", zIndex: 0, left: 0, top: 0, width: "100%" }} className='bgWellnessCardImg' src={wellnessScoreImage} alt="img" />
                     <h2 style={{ position: "relative", cursor: "context-menu" }} className='text-light'>Wellness Score</h2>
                     <h3 style={{ position: "relative", cursor: "context-menu" }} className='text-light'>80%</h3>
                   </div>
-                </div>
+                </div> : <></>}
 
                 {/* performence track section */}
                 <PerformanceTrack />
 
                 <div className='d-flex justify-content-center align-items-center w-100' style={{ position: "absolute", bottom: "2rem" }}>
                   <div className='menuModal d-flex justify-content-evenly align-items p-2' style={{ width: "fit-content" }}>
-                    <div className='rounded-3 p-2' style={{border: "1px solid #ffffff4d"}}>
+                    <div className='rounded-3 p-2' onClick={()=> setMenuData({"Dashboard":true,"AddParameter":false})} style={menuData.Dashboard ? {border: "1px solid #ffffff4d"} : {}}>
                       <img style={{ width: "2rem" }} src={dashboardIcon} alt="icon" />
                       <p className='m-0' style={{fontSize:"80%",color:"white"}}>Dashboard</p>
                     </div>
-                    <div className='rounded-3 p-2'>
-                      <img style={{ width: "2rem" }} src={dashboardIcon} alt="icon" />
+                    <div className='rounded-3 p-2' onClick={()=> setMenuData({"Dashboard":false,"AddParameter":true})} style={menuData.Dashboard ? {} : {border: "1px solid #ffffff4d"}}>
+                      <img style={{ width: "2rem" }} src={addValueIcon} alt="icon" />
                       <p className='m-0' style={{fontSize:"80%",color:"white"}}>Add Value</p>
                     </div>
                   </div>

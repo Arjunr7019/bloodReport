@@ -9,6 +9,9 @@
 .width-35 {
   width: 35% !important;
 }
+.width-60{
+  width: 60% !important;
+}
 
 .placeholderColor::placeholder {
   color: white;
@@ -188,5 +191,11 @@ nav span {
 @media only screen and (max-width: 600px) {
   .mobileScreen-graph {
     width: 100% !important;
+  }
+  .width-35{
+    width: 80% !important;
+  }
+  .width-60{
+    width: 80% !important;
   }
 }
