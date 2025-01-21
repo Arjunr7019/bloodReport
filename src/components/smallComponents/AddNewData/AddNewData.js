@@ -14,6 +14,21 @@ export default function AddNewData() {
     const [parametersName, setParameterName] = useState("ESR");
     const [resentActivityCard, setResentActivityCard] = useState("ESR");
 
+    useEffect(()=>{
+        let currentDate = new Date();
+        let year = currentDate.getFullYear();
+        let month = currentDate.getMonth();
+        let date = currentDate.getDate();
+        if (month < 10 && date < 10) {
+            setBloodParameterDate(`${year}-0${month + 1}-0${date}`)
+        } else if (month < 10) {
+            setBloodParameterDate(`${year}-0${month + 1}-${date}`)
+        } else if (date < 10) {
+            setBloodParameterDate(`${year}-${month + 1}-0${date}`)
+        }else{
+            setBloodParameterDate(`${year}-${month + 1}-${date}`)
+        }
+    },[])
     useEffect(() => {
         if (resentActivityCard === "ESR") {
             if (userData.data.user.parameters.ESR) {
@@ -99,7 +114,7 @@ export default function AddNewData() {
                         <option className='text-start' value="CRP">CRP</option>
                     </select>
                     <input type="text" value={parameterValue} onChange={(e) => setParameterValue(e.target.value)} className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
-                    <input type="date" placeholder='date' value={bloodParameterDate} onChange={(e) => setBloodParameterDate(e.target.value)} className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                    <input type="date" max={bloodParameterDate} value={bloodParameterDate} onChange={(e) => setBloodParameterDate(e.target.value)} className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
                     <div onClick={addNewData} className='cursorPointer theme-card-dark rounded-2'>
                         <p className='text-light m-0 px-3 py-1'>ADD</p>
                     </div>
@@ -114,10 +129,6 @@ export default function AddNewData() {
             </div>
             {resentActivity ? <>
                 <div className='w-100 py-2 mt-2 d-flex justify-content-start align-items-center flex-row'>
-                    {/* <p style={{ color: "white" }} className='mb-0'>Parameter Type</p>
-                    <p style={{ color: "white" }} className='mb-0'>Parameter Value</p>
-                    <p style={{ color: "white" }} className='mb-0'>Added Date</p>
-                    <p style={{ color: "white" }} className='mb-0'>Modify</p> */}
                     <p style={{ color: "white" }} className='me-auto mb-0'>Type</p>
                     <p style={{ color: "white" }} className='me-auto mb-0'>Value</p>
                     <p style={{ color: "white" }} className='me-auto mb-0'>Date</p>

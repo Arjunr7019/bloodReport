@@ -6,7 +6,6 @@ import { mirage } from 'ldrs';
 
 export default function Login() {
     const { setUserData } = useContext(UserAuthContext);
-
     const [login, setLogin] = useState(true);
     const [dropDown, setDropDown] = useState(false);
     const [passwordvisibility, setPasswordvisibility] = useState(false);
@@ -32,6 +31,23 @@ export default function Login() {
         fetch(`https://bloodreport-server.onrender.com/api`, requestOptions)
             .then(response => setServerUp(true))
             .catch(error => console.log('error', error));
+        let currentDate = new Date();
+        let year = currentDate.getFullYear();
+        let month = currentDate.getMonth();
+        let date = currentDate.getDate();
+        if (month < 10 && date < 10) {
+            setDOBValue(`${year}-0${month + 1}-0${date}`)
+            setBloodParameterDate(`${year}-0${month + 1}-0${date}`)
+        } else if (month < 10) {
+            setDOBValue(`${year}-0${month + 1}-${date}`)
+            setBloodParameterDate(`${year}-0${month + 1}-${date}`)
+        } else if (date < 10) {
+            setDOBValue(`${year}-${month + 1}-0${date}`)
+            setBloodParameterDate(`${year}-${month + 1}-0${date}`)
+        }else{
+            setDOBValue(`${year}-${month + 1}-${date}`)
+            setBloodParameterDate(`${year}-${month + 1}-${date}`)
+        }
     }, [])
 
     const bloodParameter = useRef('CRP');
@@ -67,7 +83,7 @@ export default function Login() {
         let password = passwordValue;
         let gender = genderValue;
         let DOB = DOBValue;
-        let parametersType ;
+        let parametersType;
         bloodParameterData === "" ? parametersType = "" : parametersType = bloodParameter.current
         let parameterValue = bloodParameterData;
         const today = new Date();
@@ -151,7 +167,7 @@ export default function Login() {
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="DOBId" className="form-label w-100 text-start text-light">DOB</label>
-                                    <input onChange={(e) => setDOBValue(e.target.value)} value={DOBValue} type="date" className="form-control" id="DOBId" placeholder="name@example.com" />
+                                    <input name='trip-start' max={DOBValue} onChange={(e) => setDOBValue(e.target.value)} value={DOBValue} type="date" className="form-control" id="DOBId" placeholder="name@example.com" />
                                 </div>
                                 <div className="input-group input-group-sm">
                                     <label htmlFor="exampleFormControlInput1" className="form-label w-100 text-start text-light">Parameter</label>
@@ -164,7 +180,7 @@ export default function Login() {
                                         </span>
                                     </div>
                                     <input onChange={(e) => setBloodParameterData(e.target.value)} value={bloodParameterData} type="text" className="form-control" aria-label="Sizing example input" placeholder='data' aria-describedby="inputGroup-sizing-sm" />
-                                    <input onChange={(e) => setBloodParameterDate(e.target.value)} value={bloodParameterDate} type="date" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                                    <input max={DOBValue} onChange={(e) => setBloodParameterDate(e.target.value)} value={bloodParameterDate} type="date" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
                                 </div>
                                 <ul className={dropDown ? 'dropedDown theme-card-dark p-3 m-0' : 'dropDown theme-card-dark p-2 m-0'}>
                                     <li onClick={() => { bloodParameter.current = 'CRP'; setDropDown(false) }} className={bloodParameter.current === "CRP" ? 'd-none' : 'px-2 py-1 rounded-2'}><a onClick={(e) => { e.preventDefault(); bloodParameter.current = 'CRP'; setDropDown(false) }} href="/">CRP</a></li>
