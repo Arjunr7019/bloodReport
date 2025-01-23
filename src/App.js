@@ -8,14 +8,11 @@ import Services from './Services/Services';
 function App() {
 
   const[userData, setUserData] = useState(null);
-  const[count ,setCount] = useState(0)
 
   useEffect(()=>{
     Services.getUserAuth().then(res =>{
       res ? setUserData(res) : setUserData(null)
     })
-    // setCount(count + 1)
-    // console.log(count)
   },[])
 
   return (

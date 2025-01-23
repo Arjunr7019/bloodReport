@@ -32,14 +32,16 @@ export default function Dashboard() {
     // const [graph, setGraph] = useState(true);
     const [selectedId, setSelectedId] = useState(null);
     const [parametersName, setParameterName] = useState("ESR");
-    const [ sortedDate, setSortedData ] = useState(null)
+    const [sortedDate, setSortedData] = useState(null)
 
     const { userData, setUserData } = useContext(UserAuthContext);
     const { menuData } = useContext(MenuContext);
 
     const parameterValue = [
         { value: "ESR", id: "1" },
-        { value: "CRP", id: "2" }
+        { value: "CRP", id: "2" },
+        { value: "BP", id: "3" },
+        { value: "Glc", id: "4" }
     ]
     // function convertToDate(dateString) {
     //     const [year, month, day] = dateString.split("-").map(Number);
@@ -47,19 +49,32 @@ export default function Dashboard() {
     // }
 
     useEffect(() => {
-        if (parametersName === "ESR") {
-            if (userData.data.user.parameters.ESR) {
-                let data = userData.data.user.parameters.ESR
-                setSortedData(data.sort((a, b) => new Date(b.date) - new Date(a.date)))
+        if (["ESR", "CRP", "BP", "Glc"].includes(parametersName)) {
+            const parameterData = userData.data.user.parameters[parametersName];
+            if (parameterData) {
+                let data = parameterData;
+                setSortedData(data.sort((a, b) => new Date(b.date) - new Date(a.date)));
+            } else {
+                setSortedData(null);
             }
         } else {
-            if (userData.data.user.parameters.CRP) {
-                let data = userData.data.user.parameters.CRP
-                setSortedData(data.sort((a, b) => new Date(b.date) - new Date(a.date)))
-            } else {
-                setSortedData(null)
-            }
+            setSortedData(null);
         }
+        // if (parametersName === "ESR") {
+        //     if (userData.data.user.parameters.ESR) {
+        //         let data = userData.data.user.parameters.ESR
+        //         setSortedData(data.sort((a, b) => new Date(b.date) - new Date(a.date)))
+        //     } else {
+        //         setSortedData(null)
+        //     }
+        // } else {
+        //     if (userData.data.user.parameters.CRP) {
+        //         let data = userData.data.user.parameters.CRP
+        //         setSortedData(data.sort((a, b) => new Date(b.date) - new Date(a.date)))
+        //     } else {
+        //         setSortedData(null)
+        //     }
+        // }
     }, [parametersName])
 
     const data = {
@@ -125,7 +140,7 @@ export default function Dashboard() {
     return (
         <div className='contentSection vh-100 w-75'>
             <div className='my-4 w-100 d-flex justify-content-staet align-items-center flex-row px-5'>
-                <h3 className='text-light'>{menuData?.AddParameter ? "Add Parameter":"Dashboard"}</h3>
+                <h3 className='text-light'>{menuData?.AddParameter ? "Add Parameter" : "Dashboard"}</h3>
                 <div className='theme-card d-flex justify-content-center align-items-center mx-2 rounded-2'>
                     <p className='text-light text-center mx-3 my-1 fs-6'>{"Last Test: " + userData?.data.user?.lastUpdateDate}</p>
                 </div>
@@ -198,8 +213,8 @@ export default function Dashboard() {
             <div className='w-100 mt-2'>
                 <div className='theme-card mx-5 rounded-3'>
                     <div className='py-2 d-flex justify-content-start align-items-center flex-row'>
-                        <h4 className='px-5 text-light'>{menuData?.AddParameter ? "Add New Data" :"Performance Track"}</h4>
-                        <select onChange={(e) =>  setParameterName(e.target.value)} className={menuData?.AddParameter ?'d-none' : 'outlineAndBorder text-light theme-card-dark d-flex justify-content-center align-items-center mx-2 rounded-2 px-2 py-1'}>
+                        <h4 className='px-5 text-light'>{menuData?.AddParameter ? "Add New Data" : "Performance Track"}</h4>
+                        <select onChange={(e) => setParameterName(e.target.value)} className={menuData?.AddParameter ? 'd-none' : 'outlineAndBorder text-light theme-card-dark d-flex justify-content-center align-items-center mx-2 rounded-2 px-2 py-1'}>
                             {parameterValue.map((data) =>
                                 <option className='text-light fs-6'
                                     key={data.id}

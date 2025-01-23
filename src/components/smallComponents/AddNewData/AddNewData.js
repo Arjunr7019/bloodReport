@@ -14,7 +14,7 @@ export default function AddNewData() {
     const [parametersName, setParameterName] = useState("ESR");
     const [resentActivityCard, setResentActivityCard] = useState("ESR");
 
-    useEffect(()=>{
+    useEffect(() => {
         let currentDate = new Date();
         let year = currentDate.getFullYear();
         let month = currentDate.getMonth();
@@ -25,24 +25,37 @@ export default function AddNewData() {
             setBloodParameterDate(`${year}-0${month + 1}-${date}`)
         } else if (date < 10) {
             setBloodParameterDate(`${year}-${month + 1}-0${date}`)
-        }else{
+        } else {
             setBloodParameterDate(`${year}-${month + 1}-${date}`)
         }
-    },[])
+    }, [])
     useEffect(() => {
-        if (resentActivityCard === "ESR") {
-            if (userData.data.user.parameters.ESR) {
-                let data = userData.data.user.parameters.ESR
-                setResentActivity(data.sort((a, b) => new Date(b.date) - new Date(a.date)))
+        if (["ESR", "CRP", "BP", "Glc"].includes(resentActivityCard)) {
+            const parameterData = userData.data.user.parameters[resentActivityCard];
+            if (parameterData) {
+                let data = parameterData;
+                setResentActivity(data.sort((a, b) => new Date(b.date) - new Date(a.date)));
+            } else {
+                setResentActivity(null);
             }
         } else {
-            if (userData.data.user.parameters.CRP) {
-                let data = userData.data.user.parameters.CRP
-                setResentActivity(data.sort((a, b) => new Date(b.date) - new Date(a.date)))
-            } else {
-                setResentActivity()
-            }
+            setResentActivity(null);
         }
+        // if (resentActivityCard === "ESR") {
+        //     if (userData.data.user.parameters.ESR) {
+        //         let data = userData.data.user.parameters.ESR
+        //         setResentActivity(data.sort((a, b) => new Date(b.date) - new Date(a.date)))
+        //     } else {
+        //         setResentActivity()
+        //     }
+        // } else {
+        //     if (userData.data.user.parameters.CRP) {
+        //         let data = userData.data.user.parameters.CRP
+        //         setResentActivity(data.sort((a, b) => new Date(b.date) - new Date(a.date)))
+        //     } else {
+        //         setResentActivity()
+        //     }
+        // }
         // resentActivityCard.current === "ESR" ? setResentActivity(data.sort((a, b) => new Date(b.date) - new Date(a.date))) : setResentActivity(userData.data.user.parameters.CRP);
     }, [resentActivityCard, userData])
 
@@ -112,6 +125,8 @@ export default function AddNewData() {
                     <select onChange={(e) => setParameterName(e.target.value)} className="input-group-text outlineAndBorder d-flex justify-content-center align-items-center">
                         <option className='text-start' value="ESR">ESR</option>
                         <option className='text-start' value="CRP">CRP</option>
+                        <option className='text-start' value="BP">BP</option>
+                        <option className='text-start' value="Glc">Glc</option>
                     </select>
                     <input type="text" value={parameterValue} onChange={(e) => setParameterValue(e.target.value)} className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
                     <input type="date" max={bloodParameterDate} value={bloodParameterDate} onChange={(e) => setBloodParameterDate(e.target.value)} className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
@@ -125,6 +140,8 @@ export default function AddNewData() {
                 <select onChange={(e) => setResentActivityCard(e.target.value)} className="input-group-text outlineAndBorder d-flex justify-content-center align-items-center ms-3">
                     <option className='text-start' value="ESR">ESR</option>
                     <option className='text-start' value="CRP">CRP</option>
+                    <option className='text-start' value="BP">BP</option>
+                    <option className='text-start' value="Glc">Glc</option>
                 </select>
             </div>
             {resentActivity ? <>
