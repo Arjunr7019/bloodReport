@@ -59,10 +59,13 @@ export default function Main() {
       {serverUp ?
         <>
           <MenuContext.Provider value={{ menuData, setMenuData }}>
+            {/* desktop screen */}
             <div className='d-none d-xl-flex justify-content-center align-items-center flex-row'>
               <SideMenu></SideMenu>
               <Dashboard></Dashboard>
             </div>
+
+            {/* Mobile screen */}
             <div className='mobileScreen d-flex d-xl-none align-items-center flex-column w-100'>
               {/* navBar section */}
               <div className='d-flex justify-content-center align-items-center flex-row w-100 px-4 py-3'>

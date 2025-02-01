@@ -80,7 +80,7 @@ export default function Dashboard() {
     const data = {
         labels: sortedDate?.map((data) => data.date),
         datasets: [{
-            label: parametersName === "ESR" ? 'ESR' : 'CRP',
+            label: parametersName,
             color: "white",
             data: sortedDate?.map((data) => data.value),
             backgroundColor: '#296dc0',

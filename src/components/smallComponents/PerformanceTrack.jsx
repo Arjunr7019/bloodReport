@@ -2,7 +2,7 @@ import React, { useState, useEffect,useContext } from 'react';
 import { UserAuthContext } from '../../Context/UserAuthContext';
 import { MenuContext } from '../../Context/MenuContext';
 import AddNewData from './AddNewData/AddNewData';
-import Services from '../../Services/Services';
+
 import { Line } from 'react-chartjs-2';
 import {
     Chart as Chartjs,
@@ -31,28 +31,28 @@ export default function PerformanceTrack() {
 
     const parameterValue = [
         { value: "ESR", id: "1" },
-        { value: "CRP", id: "2" }
+        { value: "CRP", id: "2" },
+        { value: "BP", id: "3" },
+        { value: "Glc", id: "4" }
     ]
     useEffect(() => {
-        if (parametersName === "ESR") {
-            if (userData.data.user.parameters.ESR) {
-                let data = userData.data.user.parameters.ESR
-                setSortedData(data.sort((a, b) => new Date(b.date) - new Date(a.date)))
+        if (["ESR", "CRP", "BP", "Glc"].includes(parametersName)) {
+            const parameterData = userData.data.user.parameters[parametersName];
+            if (parameterData) {
+                let data = parameterData;
+                setSortedData(data.sort((a, b) => new Date(b.date) - new Date(a.date)));
+            } else {
+                setSortedData(null);
             }
         } else {
-            if (userData.data.user.parameters.CRP) {
-                let data = userData.data.user.parameters.CRP
-                setSortedData(data.sort((a, b) => new Date(b.date) - new Date(a.date)))
-            } else {
-                setSortedData(null)
-            }
+            setSortedData(null);
         }
     }, [parametersName])
 
     const data = {
         labels: sortedDate?.map((data) => data.date),
         datasets: [{
-            label: parametersName === "ESR" ? 'ESR' : 'CRP',
+            label: parametersName,
             color: "white",
             data: sortedDate?.map((data) => data.value),
             backgroundColor: '#296dc0',
