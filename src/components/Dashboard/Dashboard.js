@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import '../../App.css';
 import profileImg from "../../images/profile.jpg";
 import AddNewData from '../smallComponents/AddNewData/AddNewData';
@@ -79,16 +79,43 @@ export default function Dashboard() {
 
     const data = {
         labels: sortedDate?.map((data) => data.date),
-        datasets: [{
-            label: parametersName,
-            color: "white",
-            data: sortedDate?.map((data) => data.value),
-            backgroundColor: '#296dc0',
-            borderColor: '#3690fe',
-            pointBorderColor: '#296dc0',
-            fill: false,
-            tension: 0.1,
-        }]
+        datasets: [
+            {
+                label: parametersName,
+                color: "white",
+                data: sortedDate?.map((data) => data.value),
+                backgroundColor: '#296dc0',
+                borderColor: '#3690fe',
+                pointBorderColor: '#296dc0',
+                fill: false,
+                tension: 0.1,
+            }
+        ]
+    }
+    const dataBP = {
+        labels: sortedDate?.map((data) => data.date),
+        datasets: [
+            {
+                label: "Systolic",
+                color: "white",
+                data: sortedDate?.map((data) => data.value.slice(0,3)),
+                backgroundColor: '#296dc0',
+                borderColor: '#3690fe',
+                pointBorderColor: '#296dc0',
+                fill: false,
+                tension: 0.1,
+            },
+            {
+                label: "Diastolic",
+                color: "white",
+                data: sortedDate?.map((data) => data.value.slice(4)),
+                backgroundColor: '#296dc0',
+                borderColor: '#3690fe',
+                pointBorderColor: '#296dc0',
+                fill: false,
+                tension: 0.1,
+            }
+        ]
     }
     const options = {
         // animation: false,
@@ -226,7 +253,7 @@ export default function Dashboard() {
                         {menuData?.AddParameter ? <AddNewData></AddNewData>
                             :
                             <Line
-                                data={data}
+                                data={parametersName === 'BP' ? dataBP : data}
                                 options={options}
                                 className='w-75 h-100 globalTrasition'>
                             </Line>}
