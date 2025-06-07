@@ -193,10 +193,10 @@ export default function Login() {
                             <p className='m-0'>{login ? "Don't have an account?" : "Already have an account?"}</p>
                             <a className='text-light mx-1' href="/" onClick={createAccount}>{login ? 'Sign Up' : 'Login'}</a>
                         </div>
-                        <div className='d-flex justify-content-center align-items-center flex-row text-light mb-2'>
+                        {login ? <div className='d-flex justify-content-center align-items-center flex-row text-light mb-2'>
                             <p className='m-0'>Forgot Password?</p>
                             <a className='text-light mx-1' href="/" onClick={(e) => e.preventDefault()}>Rest</a>
-                        </div>
+                        </div>:<></>}
                         <div className='w-100 d-flex justify-content-center align-items-center'>
                             <div onClick={loginSignup} className='cursorPointer theme-card-dark px-3 py-2 text-light rounded-3'>{login ? 'Login' : 'Sign Up'}</div>
                         </div>
