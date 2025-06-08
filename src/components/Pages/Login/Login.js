@@ -130,9 +130,17 @@ export default function Login() {
         }
     }
 
-    const createAccount = (e) => {
+    const createAccountAndForgotPassword = (e) => {
         e.preventDefault();
         login ? setLogin(false) : setLogin(true);
+        // if(e.target.innerText === "Sign Up"){
+        //     setLogin("login");
+        // }else if(e.target.innerText === "Login"){
+        //     setLogin("SignUp");
+        // }else{
+        //     setLogin("fogotPassword");
+        // }
+        // console.log(e.target.innerText)
     }
 
     return (
@@ -143,7 +151,7 @@ export default function Login() {
                         <h2 className='text-light mb-4'>{login ? 'Login' : 'Sign Up'}</h2>
                         <div className='w-100 d-flex justify-content-center align-items-center flex-column flex-md-row'>
                             <div className="w-100">
-                                {login ? <></> : <div className="mb-3">
+                                {login  ? <></> : <div className="mb-3">
                                     <label htmlFor="nameId" className="form-label w-100 text-start text-light">Name</label>
                                     <input onChange={(e) => setNameValue(e.target.value)} value={nameValue} type="name" className="form-control" id="nameId" placeholder="Name" />
                                 </div>}
@@ -160,7 +168,7 @@ export default function Login() {
                                 </div>
 
                             </div>
-                            {login ? <></> : <div className='w-100 ms-0 ms-md-4'>
+                            {login  ? <></> : <div className='w-100 ms-0 ms-md-4'>
                                 <div className="mb-3">
                                     <label htmlFor="gender" className="form-label w-100 text-start text-light">Gender</label>
                                     <input onChange={(e) => setGenderValue(e.target.value)} value={genderValue} type="text" className="form-control" id="gender" placeholder="Male or Female and others" />
@@ -191,14 +199,14 @@ export default function Login() {
                         </div>
                         <div className='d-flex justify-content-center align-items-center flex-row text-light mb-1'>
                             <p className='m-0'>{login ? "Don't have an account?" : "Already have an account?"}</p>
-                            <a className='text-light mx-1' href="/" onClick={createAccount}>{login ? 'Sign Up' : 'Login'}</a>
+                            <a className='text-light mx-1' href="/" onClick={(e)=> createAccountAndForgotPassword(e)}>{login ? 'Sign Up' : 'Login'}</a>
                         </div>
                         {login ? <div className='d-flex justify-content-center align-items-center flex-row text-light mb-2'>
                             <p className='m-0'>Forgot Password?</p>
-                            <a className='text-light mx-1' href="/" onClick={(e) => e.preventDefault()}>Rest</a>
+                            <a className='text-light mx-1' href="/" onClick={(e) => createAccountAndForgotPassword(e)}>Rest</a>
                         </div>:<></>}
                         <div className='w-100 d-flex justify-content-center align-items-center'>
-                            <div onClick={loginSignup} className='cursorPointer theme-card-dark px-3 py-2 text-light rounded-3'>{login ? 'Login' : 'Sign Up'}</div>
+                            <div onClick={()=> loginSignup()} className='cursorPointer theme-card-dark px-3 py-2 text-light rounded-3'>{login ? 'Login' : 'Sign Up'}</div>
                         </div>
                     </div>
                 </div> :
