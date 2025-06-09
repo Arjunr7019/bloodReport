@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import '../../../App.css';
-import { UserAuthContext } from '../../../Context/UserAuthContext';
+import { UserAuthContext } from '../../../Context/UserAuth';
 import { Toaster, toast } from 'sonner'
 import Services from '../../../Services/Services';
 import trash from '../../../images/bx-trash.svg'

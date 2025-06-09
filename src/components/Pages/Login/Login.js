@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import '../../../App.css';
 import Services from '../../../Services/Services';
-import { UserAuthContext } from '../../../Context/UserAuthContext';
+import { UserAuthContext } from '../../../Context/UserAuth';
 import { mirage } from 'ldrs';
 
 export default function Login() {

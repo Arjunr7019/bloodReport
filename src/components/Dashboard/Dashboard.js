@@ -3,7 +3,7 @@ import '../../App.css';
 import profileImg from "../../images/profile.jpg";
 import AddNewData from '../smallComponents/AddNewData/AddNewData';
 import { motion, AnimatePresence } from "framer-motion";
-import { UserAuthContext } from '../../Context/UserAuthContext';
+import { UserAuthContext } from '../../Context/UserAuth';
 import wellnessScoreImage from '../../images/bgWellnessCard.png';
 import { MenuContext } from '../../Context/MenuContext';
 import Services from '../../Services/Services';

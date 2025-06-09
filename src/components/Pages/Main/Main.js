@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import Dashboard from '../../Dashboard/Dashboard';
 import SideMenu from '../../SideMenu/SideMenu';
-import { UserAuthContext } from '../../../Context/UserAuthContext';
+import { UserAuthContext } from '../../../Context/UserAuth';
 import Services from '../../../Services/Services';
 import { MenuContext } from '../../../Context/MenuContext';
 import userIcon from '../../../images/profile.jpg';
