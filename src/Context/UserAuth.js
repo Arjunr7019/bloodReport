@@ -8,8 +8,7 @@ export const UserAuthProvider = ({ children }) => {
 
     useEffect(() => {
         Services.getUserAuth().then(res => {
-          res ? setUserData(res) : setUserData(null)
-          console.log(res)
+          res ? setUserData(res) : setUserData(null);
         })
       }, [])
 

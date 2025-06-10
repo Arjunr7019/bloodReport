@@ -9,11 +9,7 @@ export default function Login() {
     const [login, setLogin] = useState(true);
     const [dropDown, setDropDown] = useState(false);
     const [passwordvisibility, setPasswordvisibility] = useState(false);
-    const [nameValue, setNameValue] = useState("");
-    const [emailValue, setEmailValue] = useState("");
-    const [passwordValue, setPasswordValue] = useState("");
-    const [DOBValue, setDOBValue] = useState("");
-    const [genderValue, setGenderValue] = useState("");
+    const [inputData,setInputData] = useState({})
     const [bloodParameterData, setBloodParameterData] = useState("");
     const [bloodParameterDate, setBloodParameterDate] = useState("");
 
@@ -36,16 +32,16 @@ export default function Login() {
         let month = currentDate.getMonth();
         let date = currentDate.getDate();
         if (month < 10 && date < 10) {
-            setDOBValue(`${year}-0${month + 1}-0${date}`)
+            setInputData(val=>{return{...val,DOB:`${year}-0${month + 1}-0${date}`}})
             setBloodParameterDate(`${year}-0${month + 1}-0${date}`)
         } else if (month < 10) {
-            setDOBValue(`${year}-0${month + 1}-${date}`)
+            setInputData(val=>{return{...val,DOB:`${year}-0${month + 1}-${date}`}})
             setBloodParameterDate(`${year}-0${month + 1}-${date}`)
         } else if (date < 10) {
-            setDOBValue(`${year}-${month + 1}-0${date}`)
+            setInputData(val=>{return{...val,DOB:`${year}-${month + 1}-0${date}`}})
             setBloodParameterDate(`${year}-${month + 1}-0${date}`)
         }else{
-            setDOBValue(`${year}-${month + 1}-${date}`)
+            setInputData(val=>{return{...val,DOB:`${year}-${month + 1}-${date}`}})
             setBloodParameterDate(`${year}-${month + 1}-${date}`)
         }
     }, [])
@@ -56,8 +52,8 @@ export default function Login() {
         login ? loginUser() : signUpUser();
     }
     const loginUser = async () => {
-        let email = emailValue;
-        let password = passwordValue;
+        let email = inputData.email;
+        let password = inputData.password;
         const response = await fetch('https://bloodreport-server.onrender.com/api/login', {
             method: 'POST',
             headers: {
@@ -78,11 +74,11 @@ export default function Login() {
         }
     }
     const signUpUser = async () => {
-        let name = nameValue;
-        let email = emailValue;
-        let password = passwordValue;
-        let gender = genderValue;
-        let DOB = DOBValue;
+        let name = inputData.name;
+        let email = inputData.email;
+        let password = inputData.password;
+        let gender = inputData.gender;
+        let DOB = inputData.DOB;
         let parametersType;
         bloodParameterData === "" ? parametersType = "" : parametersType = bloodParameter.current
         let parameterValue = bloodParameterData;
@@ -133,14 +129,6 @@ export default function Login() {
     const createAccountAndForgotPassword = (e) => {
         e.preventDefault();
         login ? setLogin(false) : setLogin(true);
-        // if(e.target.innerText === "Sign Up"){
-        //     setLogin("login");
-        // }else if(e.target.innerText === "Login"){
-        //     setLogin("SignUp");
-        // }else{
-        //     setLogin("fogotPassword");
-        // }
-        // console.log(e.target.innerText)
     }
 
     return (
@@ -153,15 +141,15 @@ export default function Login() {
                             <div className="w-100">
                                 {login  ? <></> : <div className="mb-3">
                                     <label htmlFor="nameId" className="form-label w-100 text-start text-light">Name</label>
-                                    <input onChange={(e) => setNameValue(e.target.value)} value={nameValue} type="name" className="form-control" id="nameId" placeholder="Name" />
+                                    <input onChange={(e) => setInputData(val=> {return{...val,name:e.target.value}})} value={inputData.name} type="name" className="form-control" id="nameId" placeholder="Name" />
                                 </div>}
                                 <div className="mb-3">
                                     <label htmlFor="emailId" className="form-label w-100 text-start text-light">Email address</label>
-                                    <input onChange={(e) => setEmailValue(e.target.value)} value={emailValue} type="email" className="form-control" id="emailId" placeholder="name@example.com" />
+                                    <input onChange={(e) => setInputData(val=> {return{...val,email:e.target.value}})} value={inputData.email} type="email" className="form-control" id="emailId" placeholder="name@example.com" />
                                 </div>
                                 <div className="position-relative mb-4">
                                     <label htmlFor="passwordId" className="form-label w-100 text-start text-light">Password</label>
-                                    <input onChange={(e) => setPasswordValue(e.target.value)} value={passwordValue} type={passwordvisibility ? "text" : "password"} className="form-control" id="passwordId" placeholder="Password" />
+                                    <input onChange={(e) => setInputData(val=> {return{...val,password:e.target.value}})} value={inputData.password} type={passwordvisibility ? "text" : "password"} className="form-control" id="passwordId" placeholder="Password" />
                                     <span onClick={() => passwordvisibility ? setPasswordvisibility(false) : setPasswordvisibility(true)} className="passwordIcon cursorPointer material-symbols-outlined">
                                         {passwordvisibility ? "visibility" : "visibility_off"}
                                     </span>
@@ -171,11 +159,11 @@ export default function Login() {
                             {login  ? <></> : <div className='w-100 ms-0 ms-md-4'>
                                 <div className="mb-3">
                                     <label htmlFor="gender" className="form-label w-100 text-start text-light">Gender</label>
-                                    <input onChange={(e) => setGenderValue(e.target.value)} value={genderValue} type="text" className="form-control" id="gender" placeholder="Male or Female and others" />
+                                    <input onChange={(e) => setInputData(val=> {return{...val,gender:e.target.value}})} value={inputData.gender} type="text" className="form-control" id="gender" placeholder="Male or Female and others" />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="DOBId" className="form-label w-100 text-start text-light">DOB</label>
-                                    <input name='trip-start' max={DOBValue} onChange={(e) => setDOBValue(e.target.value)} value={DOBValue} type="date" className="form-control" id="DOBId" placeholder="name@example.com" />
+                                    <input name='trip-start' max={inputData.DOB} onChange={(e) => setInputData(val=> {return{...val,DOB:e.target.value}})} value={inputData.DOB} type="date" className="form-control" id="DOBId" placeholder="name@example.com" />
                                 </div>
                                 <div className="input-group input-group-sm">
                                     <label htmlFor="exampleFormControlInput1" className="form-label w-100 text-start text-light">Parameter</label>
@@ -188,7 +176,7 @@ export default function Login() {
                                         </span>
                                     </div>
                                     <input onChange={(e) => setBloodParameterData(e.target.value)} value={bloodParameterData} type="text" className="form-control" aria-label="Sizing example input" placeholder='data' aria-describedby="inputGroup-sizing-sm" />
-                                    <input max={DOBValue} onChange={(e) => setBloodParameterDate(e.target.value)} value={bloodParameterDate} type="date" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                                    <input max={inputData.DOB} onChange={(e) => setBloodParameterDate(e.target.value)} value={bloodParameterDate} type="date" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
                                 </div>
                                 <ul className={dropDown ? 'dropedDown theme-card-dark p-3 m-0' : 'dropDown theme-card-dark p-2 m-0'}>
                                     <li onClick={() => { bloodParameter.current = 'CRP'; setDropDown(false) }} className={bloodParameter.current === "CRP" ? 'd-none' : 'px-2 py-1 rounded-2'}><a onClick={(e) => { e.preventDefault(); bloodParameter.current = 'CRP'; setDropDown(false) }} href="/">CRP</a></li>
