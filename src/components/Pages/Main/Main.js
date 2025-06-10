@@ -12,45 +12,34 @@ import dashboardIcon from '../../../images/bxs-dashboard.svg';
 import addValueIcon from '../../../images/bxs-add-to-queue.svg';
 
 export default function Main() {
-  const [serverUp, setServerUp] = useState(false);
-  const { userData, setUserData } = useContext(UserAuthContext);
+  const { userData, setUserData, serverUp } = useContext(UserAuthContext);
   const [menuData, setMenuData] = useState({ "Dashboard": true, "AddParameter": false });
   const [logoutButton, setLogoutButton] = useState(false);
 
-  const updataUserData = async () => {
-    let email = userData?.data.user.email;
-    const response = await fetch('https://bloodreport-server.onrender.com/api/LoggedInUserData', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email
-      })
-    });
-    if (response.status === 200) {
-      // The user is authenticated.
-      let data = await response.json()
-      setUserData(data);
-      await Services.setUserAuth(data);
-    } else {
-      // The user is not authenticated.
-    }
-  }
-
-  useEffect(() => {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    var requestOptions = {
-      method: "get",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-    fetch(`https://bloodreport-server.onrender.com/api`, requestOptions)
-      .then(response => setServerUp(true))
-      .then(res => updataUserData())
-      .catch(error => console.log('error', error));
-  }, [])
+  // useEffect(() => {
+  //   let email = userData?.data.user.email;
+  //   fetch('https://bloodreport-server.onrender.com/api/LoggedInUserData', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({
+  //       email
+  //     })
+  //   }).then(res => {
+  //     if (res.status === 200) {
+  //       // The user is authenticated.
+  //       let data = res.json()
+  //       console.log(data)
+  //       // setUserData(data);
+  //       // Services.setUserAuth(data);
+  //     } else {
+  //       // The user is not authenticated.
+  //     }
+  //   }).catch(err => {
+  //     console.log("error:", err);
+  //   })
+  // }, [serverUp])
 
 
   // console.log(loggedInUserInfo.state.email)

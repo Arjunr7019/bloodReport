@@ -5,7 +5,7 @@ import { UserAuthContext } from '../../../Context/UserAuth';
 import { mirage } from 'ldrs';
 
 export default function Login() {
-    const { setUserData } = useContext(UserAuthContext);
+    const { setUserData,serverUp } = useContext(UserAuthContext);
     const [login, setLogin] = useState(true);
     const [dropDown, setDropDown] = useState(false);
     const [passwordvisibility, setPasswordvisibility] = useState(false);
@@ -13,20 +13,9 @@ export default function Login() {
     const [bloodParameterData, setBloodParameterData] = useState("");
     const [bloodParameterDate, setBloodParameterDate] = useState("");
 
-    const [serverUp, setServerUp] = useState(false);
     mirage.register()
 
     useEffect(() => {
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        var requestOptions = {
-            method: "get",
-            headers: myHeaders,
-            redirect: "follow",
-        };
-        fetch(`https://bloodreport-server.onrender.com/api`, requestOptions)
-            .then(response => setServerUp(true))
-            .catch(error => console.log('error', error));
         let currentDate = new Date();
         let year = currentDate.getFullYear();
         let month = currentDate.getMonth();
@@ -97,7 +86,7 @@ export default function Login() {
         const currentTime = `${hours}:${minutes}:${seconds}`;
 
         let joinedDate = currentDate + " " + currentTime;
-        console.log(`Today is ${currentDate} and the time is ${currentTime}`);
+        // console.log(`Today is ${currentDate} and the time is ${currentTime}`);
         const response = await fetch('https://bloodreport-server.onrender.com/api/register', {
             method: 'POST',
             headers: {
