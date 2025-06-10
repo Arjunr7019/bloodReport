@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/bloodReport/static/css/main.d8b96309.css",
-    "main.js": "/bloodReport/static/js/main.fb3ef7fa.js",
+    "main.js": "/bloodReport/static/js/main.06e1f81c.js",
     "static/js/453.7c91168e.chunk.js": "/bloodReport/static/js/453.7c91168e.chunk.js",
     "static/media/bgWellnessCard.png": "/bloodReport/static/media/bgWellnessCard.7aca0b26944db110b356.png",
     "static/media/profile.jpg": "/bloodReport/static/media/profile.8c9ead08c042e90f9657.jpg",
@@ -12,11 +12,11 @@
     "static/media/bx-trash.svg": "/bloodReport/static/media/bx-trash.396157ab8e8697a12ee783440e70007b.svg",
     "static/media/bxs-add-to-queue.svg": "/bloodReport/static/media/bxs-add-to-queue.2756b60a283aabb13076220b9ceade04.svg",
     "main.d8b96309.css.map": "/bloodReport/static/css/main.d8b96309.css.map",
-    "main.fb3ef7fa.js.map": "/bloodReport/static/js/main.fb3ef7fa.js.map",
+    "main.06e1f81c.js.map": "/bloodReport/static/js/main.06e1f81c.js.map",
     "453.7c91168e.chunk.js.map": "/bloodReport/static/js/453.7c91168e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.d8b96309.css",
-    "static/js/main.fb3ef7fa.js"
+    "static/js/main.06e1f81c.js"
   ]
 }
