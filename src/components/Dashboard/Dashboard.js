@@ -75,7 +75,7 @@ export default function Dashboard() {
         //         setSortedData(null)
         //     }
         // }
-    }, [parametersName])
+    }, [parametersName,userData])
 
     const data = {
         labels: sortedDate?.map((data) => data.date),
