@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import Dashboard from '../../Dashboard/Dashboard';
 import SideMenu from '../../SideMenu/SideMenu';
 import { UserAuthContext } from '../../../Context/UserAuth';
@@ -12,7 +12,7 @@ import dashboardIcon from '../../../images/bxs-dashboard.svg';
 import addValueIcon from '../../../images/bxs-add-to-queue.svg';
 
 export default function Main() {
-  const { userData, setUserData, serverUp } = useContext(UserAuthContext);
+  const { userData, setUserData, serverUp,totalWellnessValue } = useContext(UserAuthContext);
   const [menuData, setMenuData] = useState({ "Dashboard": true, "AddParameter": false });
   const [logoutButton, setLogoutButton] = useState(false);
 
@@ -99,8 +99,8 @@ export default function Main() {
                 {menuData.Dashboard ? <div className='px-4 w-100'>
                   <div style={{ position: "relative", overflow: "hidden" }} className='bgWellnessCard w-100 rounded-3 theme-card py-4'>
                     <img style={{ position: "absolute", zIndex: 0, left: 0, top: 0, width: "100%" }} className='bgWellnessCardImg' src={wellnessScoreImage} alt="img" />
-                    <h2 style={{ position: "relative", cursor: "context-menu" }} className='text-light'>Wellness Score</h2>
-                    <h3 style={{ position: "relative", cursor: "context-menu" }} className='text-light'>80%</h3>
+                    <h2 style={{ position: "relative", cursor: "context-menu",textShadow:"0.5px 0.5px #000000" }} className='text-light'>Wellness Score</h2>
+                    <h3 style={{ position: "relative", cursor: "context-menu",textShadow:"0.5px 0.5px #000000" }} className='text-light'>{totalWellnessValue}</h3>
                   </div>
                 </div> : <></>}
 

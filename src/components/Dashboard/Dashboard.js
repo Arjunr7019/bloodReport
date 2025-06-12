@@ -34,7 +34,7 @@ export default function Dashboard() {
     const [parametersName, setParameterName] = useState("ESR");
     const [sortedDate, setSortedData] = useState(null)
 
-    const { userData, setUserData } = useContext(UserAuthContext);
+    const { userData, setUserData,totalWellnessValue } = useContext(UserAuthContext);
     const { menuData } = useContext(MenuContext);
 
     const parameterValue = [
@@ -228,8 +228,8 @@ export default function Dashboard() {
 
                 <div style={{ position: "relative", height: "100%", overflow: "hidden" }} className='bgWellnessCard w-50 rounded-3 theme-card py-4'>
                     <img style={{ position: "absolute", zIndex: 0, left: 0, top: 0, width: "100%" }} className='bgWellnessCardImg' src={wellnessScoreImage} alt="img" />
-                    <h2 style={{ position: "relative", cursor: "context-menu" }} className='text-light'>Wellness Score</h2>
-                    <h3 style={{ position: "relative", cursor: "context-menu" }} className='text-light'>80%</h3>
+                    <h2 style={{ position: "relative", cursor: "context-menu",textShadow:"0.5px 0.5px #000000" }} className='text-light'>Wellness Score</h2>
+                    <h3 style={{ position: "relative", cursor: "context-menu",textShadow:"0.5px 0.5px #000000" }} className='text-light'>{totalWellnessValue}</h3>
                 </div>
                 {/* <div className='w-50 rounded-3 bgWellnessCard theme-card py-4'>
                     <h2 className='text-light'>Wellness Score</h2>
