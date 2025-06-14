@@ -26,7 +26,7 @@ export default function PerformanceTrack() {
     const [parametersName, setParameterName] = useState("ESR");
     const [sortedDate, setSortedData] = useState(null)
 
-    const { userData, setUserData } = useContext(UserAuthContext);
+    const { userData } = useContext(UserAuthContext);
     const { menuData } = useContext(MenuContext);
 
     const parameterValue = [
@@ -61,6 +61,31 @@ export default function PerformanceTrack() {
             fill: false,
             tension: 0.1,
         }]
+    }
+    const dataBP = {
+        labels: sortedDate?.map((data) => data.date),
+        datasets: [
+            {
+                label: "Systolic",
+                color: "white",
+                data: sortedDate?.map((data) => data.value.slice(0,3)),
+                backgroundColor: '#296dc0',
+                borderColor: '#3690fe',
+                pointBorderColor: '#296dc0',
+                fill: false,
+                tension: 0.1,
+            },
+            {
+                label: "Diastolic",
+                color: "white",
+                data: sortedDate?.map((data) => data.value.slice(4)),
+                backgroundColor: '#296dc0',
+                borderColor: '#3690fe',
+                pointBorderColor: '#296dc0',
+                fill: false,
+                tension: 0.1,
+            }
+        ]
     }
     const options = {
         // animation: false,
@@ -125,7 +150,7 @@ export default function PerformanceTrack() {
                     {menuData?.AddParameter ? <AddNewData></AddNewData>
                         :
                         <Line
-                            data={data}
+                            data={parametersName === 'BP' ? dataBP : data}
                             options={options}
                             className='mobileScreen-graph globalTrasition'>
                         </Line>}

@@ -21,6 +21,7 @@ export const UserAuthProvider = ({ children }) => {
     useEffect(() => {
         let totalCRP = 0;
         let totalESR = 0;
+        let totalBP = 0;
 
         userData?.data?.user?.parameters?.CRP?.forEach((e) => {
             totalCRP += e?.value ? parseFloat(e.value) : 0;
@@ -28,6 +29,14 @@ export const UserAuthProvider = ({ children }) => {
 
         userData?.data?.user?.parameters?.ESR?.forEach((e) => {
             totalESR += e?.value ? parseFloat(e.value) : 0;
+        });
+
+        userData?.data?.user?.parameters?.BP?.forEach((e) => {
+            if(e?.value){
+                totalBP += (parseFloat(e.value.slice(0,3)) >= 90 && parseFloat(e.value.slice(0,3)) <= 120 ) ? 0 : parseFloat(e.value.slice(0,3));
+            }else{
+                totalBP += 0
+            }
         });
 
         // setWellnessValue((val) => ({
@@ -50,7 +59,7 @@ export const UserAuthProvider = ({ children }) => {
         // const negativeValuePerPercentage = (wellnessValue / userData?.data?.user?.parameters?.CRP.length) / 6
         console.log(100 - totalValue)
         setTotalWellnessValue(`${(100 - totalValue).toFixed(2)}%`)
-        // console.log(userData)
+        console.log(totalBP)
     }, [userData])
 
     return (
