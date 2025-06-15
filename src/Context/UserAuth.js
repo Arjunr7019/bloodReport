@@ -7,6 +7,8 @@ export const UserAuthProvider = ({ children }) => {
     const [userData, setUserData] = useState(null);
     const [serverUp, setServerUp] = useState(false);
     const [totalWellnessValue, setTotalWellnessValue] = useState("100%");
+    const [inputData,setInputData] = useState({parameterValue:""})
+    const [login, setLogin] = useState(true);
     // const [wellnessValue, setWellnessValue] = useState({});
 
     useEffect(() => {
@@ -32,9 +34,9 @@ export const UserAuthProvider = ({ children }) => {
         });
 
         userData?.data?.user?.parameters?.BP?.forEach((e) => {
-            if(e?.value){
-                totalBP += (parseFloat(e.value.slice(0,3)) >= 90 && parseFloat(e.value.slice(0,3)) <= 120 ) ? 0 : parseFloat(e.value.slice(0,3));
-            }else{
+            if (e?.value) {
+                totalBP += (parseFloat(e.value.slice(0, 3)) >= 90 && parseFloat(e.value.slice(0, 3)) <= 120) ? 0 : parseFloat(e.value.slice(0, 3));
+            } else {
                 totalBP += 0
             }
         });
@@ -44,26 +46,123 @@ export const UserAuthProvider = ({ children }) => {
         //     CRP: totalCRP,
         //     ESR: totalESR,
         // }));
-
-        // userData?.data?.user?.parameters?.CRP.map((e) => {
-        //     if (e) setWellnessValue(val => { return { ...val, CRP: parseFloat(e.value) + wellnessValue?.CRP } });
-        //     else setWellnessValue(val => { return { ...val, CRP: 0 } });
-        // })
-        // userData?.data?.user?.parameters?.ESR.map((e) => {
-        //     if (e) setWellnessValue(val => { return { ...val, ESR: parseFloat(e.value) + wellnessValue?.ESR } });
-        //     else setWellnessValue(val => { return { ...val, ESR: 0 } });
-        // })
         console.log(totalCRP)
-        const totalValue = (((totalCRP/userData?.data?.user?.parameters?.CRP.length)-6)*((totalCRP/userData?.data?.user?.parameters?.CRP.length)/6))+ 
-        (((totalESR/userData?.data?.user?.parameters?.ESR.length)-10)*((totalESR/userData?.data?.user?.parameters?.ESR.length)/10)) ;
+        const totalValue = (((totalCRP / userData?.data?.user?.parameters?.CRP?.length) - 6) * ((totalCRP / userData?.data?.user?.parameters?.CRP?.length) / 6)) +
+            (((totalESR / userData?.data?.user?.parameters?.ESR?.length) - 10) * ((totalESR / userData?.data?.user?.parameters?.ESR?.length) / 10));
         // const negativeValuePerPercentage = (wellnessValue / userData?.data?.user?.parameters?.CRP.length) / 6
         console.log(100 - totalValue)
         setTotalWellnessValue(`${(100 - totalValue).toFixed(2)}%`)
         console.log(totalBP)
     }, [userData])
 
+    useEffect(() => {
+        let currentDate = new Date();
+        let year = currentDate.getFullYear();
+        let month = currentDate.getMonth();
+        let date = currentDate.getDate();
+        if (month < 10 && date < 10) {
+            setInputData(val => { return { ...val, DOB: `${year}-0${month + 1}-0${date}` } })
+            setInputData(val => { return { ...val, parameterDate: `${year}-0${month + 1}-0${date}` } })
+        } else if (month < 10) {
+            setInputData(val => { return { ...val, DOB: `${year}-0${month + 1}-${date}` } })
+            setInputData(val => { return { ...val, parameterDate: `${year}-0${month + 1}-${date}` } })
+        } else if (date < 10) {
+            setInputData(val => { return { ...val, DOB: `${year}-${month + 1}-0${date}` } })
+            setInputData(val => { return { ...val, parameterDate: `${year}-${month + 1}-0${date}` } })
+        } else {
+            setInputData(val => { return { ...val, DOB: `${year}-${month + 1}-${date}` } })
+            setInputData(val => { return { ...val, parameterDate: `${year}-${month + 1}-${date}` } })
+        }
+    }, [])
+
+    const loginUser = async () => {
+        let email = inputData.email;
+        let password = inputData.password;
+        const response = await fetch('https://bloodreport-server.onrender.com/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email,
+                password
+            })
+        });
+        if (response.status === 200) {
+            // The user is authenticated.
+            let data = await response.json();
+            await Services.setUserAuth(data)
+            setUserData(data);
+            setInputData({})
+        } else {
+            // The user is not authenticated.
+        }
+    }
+    const signUpUser = async (bloodParameter) => {
+        let name = inputData.name;
+        let email = inputData.email;
+        let password = inputData.password;
+        let gender = inputData.gender;
+        let DOB = inputData.DOB;
+        let parametersType;
+        inputData?.parameterValue === "" ? parametersType = "" : parametersType = bloodParameter.current
+        let parameterValue = inputData?.parameterValue;
+        const today = new Date();
+        // const date = today.getDate();
+        // const month = today.getMonth();
+        // const year = today.getFullYear();
+        const hours = today.getHours();
+        const minutes = today.getMinutes();
+        const seconds = today.getSeconds();
+
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+        const currentDate = `${dayNames[today.getDay()]}, ${monthNames[today.getMonth()]} ${today.getDate()}, ${today.getFullYear()}`;
+        const currentTime = `${hours}:${minutes}:${seconds}`;
+
+        let joinedDate = currentDate + " " + currentTime;
+        // console.log(`Today is ${currentDate} and the time is ${currentTime}`);
+        const response = await fetch('https://bloodreport-server.onrender.com/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name,
+                email,
+                password,
+                gender,
+                DOB,
+                parametersType,
+                parameterValue,
+                bloodParameterDate: inputData?.parameterDate,
+                joinedDate
+            })
+        });
+        if (response.status === 201) {
+            // The user is authenticated.
+            setLogin(true);
+            let data = await response.json();
+            await Services.setUserAuth(data)
+            setUserData(data);
+            setInputData({})
+        } else {
+            // The user is not authenticated.
+        }
+    }
+
     return (
-        <UserAuthContext.Provider value={{ userData, setUserData, serverUp, totalWellnessValue }}>
+        <UserAuthContext.Provider value={{ userData, 
+        setUserData, 
+        serverUp, 
+        totalWellnessValue,
+        inputData,
+        setInputData,
+        loginUser,
+        signUpUser,
+        setLogin,
+        login }}>
             {children}
         </UserAuthContext.Provider>
     )

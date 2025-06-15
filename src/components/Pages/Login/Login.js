@@ -1,118 +1,20 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import '../../../App.css';
-import Services from '../../../Services/Services';
 import { UserAuthContext } from '../../../Context/UserAuth';
 import { mirage } from 'ldrs';
 
 export default function Login() {
-    const { setUserData,serverUp } = useContext(UserAuthContext);
-    const [login, setLogin] = useState(true);
+    const { serverUp,inputData,setInputData,loginUser,signUpUser,setLogin,login } = useContext(UserAuthContext);
     const [dropDown, setDropDown] = useState(false);
     const [passwordvisibility, setPasswordvisibility] = useState(false);
-    const [inputData,setInputData] = useState({})
-    const [bloodParameterData, setBloodParameterData] = useState("");
-    const [bloodParameterDate, setBloodParameterDate] = useState("");
+    // const [inputData,setInputData] = useState({parameterValue:""})
 
     mirage.register()
-
-    useEffect(() => {
-        let currentDate = new Date();
-        let year = currentDate.getFullYear();
-        let month = currentDate.getMonth();
-        let date = currentDate.getDate();
-        if (month < 10 && date < 10) {
-            setInputData(val=>{return{...val,DOB:`${year}-0${month + 1}-0${date}`}})
-            setBloodParameterDate(`${year}-0${month + 1}-0${date}`)
-        } else if (month < 10) {
-            setInputData(val=>{return{...val,DOB:`${year}-0${month + 1}-${date}`}})
-            setBloodParameterDate(`${year}-0${month + 1}-${date}`)
-        } else if (date < 10) {
-            setInputData(val=>{return{...val,DOB:`${year}-${month + 1}-0${date}`}})
-            setBloodParameterDate(`${year}-${month + 1}-0${date}`)
-        }else{
-            setInputData(val=>{return{...val,DOB:`${year}-${month + 1}-${date}`}})
-            setBloodParameterDate(`${year}-${month + 1}-${date}`)
-        }
-    }, [])
 
     const bloodParameter = useRef('CRP');
 
     const loginSignup = () => {
-        login ? loginUser() : signUpUser();
-    }
-    const loginUser = async () => {
-        let email = inputData.email;
-        let password = inputData.password;
-        const response = await fetch('https://bloodreport-server.onrender.com/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email,
-                password
-            })
-        });
-        if (response.status === 200) {
-            // The user is authenticated.
-            let data = await response.json();
-            await Services.setUserAuth(data)
-            setUserData(data);
-        } else {
-            // The user is not authenticated.
-        }
-    }
-    const signUpUser = async () => {
-        let name = inputData.name;
-        let email = inputData.email;
-        let password = inputData.password;
-        let gender = inputData.gender;
-        let DOB = inputData.DOB;
-        let parametersType;
-        bloodParameterData === "" ? parametersType = "" : parametersType = bloodParameter.current
-        let parameterValue = bloodParameterData;
-        const today = new Date();
-        // const date = today.getDate();
-        // const month = today.getMonth();
-        // const year = today.getFullYear();
-        const hours = today.getHours();
-        const minutes = today.getMinutes();
-        const seconds = today.getSeconds();
-
-        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-        const currentDate = `${dayNames[today.getDay()]}, ${monthNames[today.getMonth()]} ${today.getDate()}, ${today.getFullYear()}`;
-        const currentTime = `${hours}:${minutes}:${seconds}`;
-
-        let joinedDate = currentDate + " " + currentTime;
-        // console.log(`Today is ${currentDate} and the time is ${currentTime}`);
-        const response = await fetch('https://bloodreport-server.onrender.com/api/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name,
-                email,
-                password,
-                gender,
-                DOB,
-                parametersType,
-                parameterValue,
-                bloodParameterDate,
-                joinedDate
-            })
-        });
-        if (response.status === 201) {
-            // The user is authenticated.
-            setLogin(true);
-            let data = await response.json();
-            await Services.setUserAuth(data)
-            setUserData(data);
-        } else {
-            // The user is not authenticated.
-        }
+        login ? loginUser() : signUpUser(bloodParameter);
     }
 
     const createAccountAndForgotPassword = (e) => {
@@ -130,15 +32,15 @@ export default function Login() {
                             <div className="w-100">
                                 {login  ? <></> : <div className="mb-3">
                                     <label htmlFor="nameId" className="form-label w-100 text-start text-light">Name</label>
-                                    <input onChange={(e) => setInputData(val=> {return{...val,name:e.target.value}})} value={inputData.name} type="name" className="form-control" id="nameId" placeholder="Name" />
+                                    <input onChange={(e) => setInputData(val=> {return{...val,name:e.target.value}})} value={inputData?.name} type="name" className="form-control" id="nameId" placeholder="Name" />
                                 </div>}
                                 <div className="mb-3">
                                     <label htmlFor="emailId" className="form-label w-100 text-start text-light">Email address</label>
-                                    <input onChange={(e) => setInputData(val=> {return{...val,email:e.target.value}})} value={inputData.email} type="email" className="form-control" id="emailId" placeholder="name@example.com" />
+                                    <input onChange={(e) => setInputData(val=> {return{...val,email:e.target.value}})} value={inputData?.email} type="email" className="form-control" id="emailId" placeholder="name@example.com" />
                                 </div>
                                 <div className="position-relative mb-4">
                                     <label htmlFor="passwordId" className="form-label w-100 text-start text-light">Password</label>
-                                    <input onChange={(e) => setInputData(val=> {return{...val,password:e.target.value}})} value={inputData.password} type={passwordvisibility ? "text" : "password"} className="form-control" id="passwordId" placeholder="Password" />
+                                    <input onChange={(e) => setInputData(val=> {return{...val,password:e.target.value}})} value={inputData?.password} type={passwordvisibility ? "text" : "password"} className="form-control" id="passwordId" placeholder="Password" />
                                     <span onClick={() => passwordvisibility ? setPasswordvisibility(false) : setPasswordvisibility(true)} className="passwordIcon cursorPointer material-symbols-outlined">
                                         {passwordvisibility ? "visibility" : "visibility_off"}
                                     </span>
@@ -148,11 +50,11 @@ export default function Login() {
                             {login  ? <></> : <div className='w-100 ms-0 ms-md-4'>
                                 <div className="mb-3">
                                     <label htmlFor="gender" className="form-label w-100 text-start text-light">Gender</label>
-                                    <input onChange={(e) => setInputData(val=> {return{...val,gender:e.target.value}})} value={inputData.gender} type="text" className="form-control" id="gender" placeholder="Male or Female and others" />
+                                    <input onChange={(e) => setInputData(val=> {return{...val,gender:e.target.value}})} value={inputData?.gender} type="text" className="form-control" id="gender" placeholder="Male or Female and others" />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="DOBId" className="form-label w-100 text-start text-light">DOB</label>
-                                    <input name='trip-start' max={inputData.DOB} onChange={(e) => setInputData(val=> {return{...val,DOB:e.target.value}})} value={inputData.DOB} type="date" className="form-control" id="DOBId" placeholder="name@example.com" />
+                                    <input name='trip-start' max={inputData.DOB} onChange={(e) => setInputData(val=> {return{...val,DOB:e.target.value}})} value={inputData?.DOB} type="date" className="form-control" id="DOBId" placeholder="name@example.com" />
                                 </div>
                                 <div className="input-group input-group-sm">
                                     <label htmlFor="exampleFormControlInput1" className="form-label w-100 text-start text-light">Parameter</label>
@@ -164,8 +66,8 @@ export default function Login() {
                                             </span>
                                         </span>
                                     </div>
-                                    <input onChange={(e) => setBloodParameterData(e.target.value)} value={bloodParameterData} type="text" className="form-control" aria-label="Sizing example input" placeholder='data' aria-describedby="inputGroup-sizing-sm" />
-                                    <input max={inputData.DOB} onChange={(e) => setBloodParameterDate(e.target.value)} value={bloodParameterDate} type="date" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                                    <input onChange={(e) => setInputData(val=> {return{...val,parameterValue:e.target.value}})} value={inputData?.parameterValue} type="text" className="form-control" aria-label="Sizing example input" placeholder='data' aria-describedby="inputGroup-sizing-sm" />
+                                    <input max={inputData.DOB} onChange={(e) => setInputData(val=> {return{...val,parameterDate:e.target.value}})} value={inputData?.parameterDate} type="date" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
                                 </div>
                                 <ul className={dropDown ? 'dropedDown theme-card-dark p-3 m-0' : 'dropDown theme-card-dark p-2 m-0'}>
                                     <li onClick={() => { bloodParameter.current = 'CRP'; setDropDown(false) }} className={bloodParameter.current === "CRP" ? 'd-none' : 'px-2 py-1 rounded-2'}><a onClick={(e) => { e.preventDefault(); bloodParameter.current = 'CRP'; setDropDown(false) }} href="/">CRP</a></li>
