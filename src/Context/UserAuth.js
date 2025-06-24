@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import Services from "../Services/Services";
+import { Toaster, toast } from 'sonner'
 
 export const UserAuthContext = createContext(null)
 
@@ -7,8 +8,9 @@ export const UserAuthProvider = ({ children }) => {
     const [userData, setUserData] = useState(null);
     const [serverUp, setServerUp] = useState(false);
     const [totalWellnessValue, setTotalWellnessValue] = useState("100%");
-    const [inputData,setInputData] = useState({parameterValue:""})
+    const [inputData, setInputData] = useState({ parameterValue: "" })
     const [login, setLogin] = useState(true);
+    const [otpSendSuccessfully, setOtpSendSuccessfully] = useState(false);
     // const [wellnessValue, setWellnessValue] = useState({});
 
     useEffect(() => {
@@ -152,17 +154,43 @@ export const UserAuthProvider = ({ children }) => {
         }
     }
 
+    const getOtp = () => {
+        let email = inputData.email;
+        if (email) {
+            fetch(`https://bloodreport-server.onrender.com/api/forgotPassword/${email}`).then((response) => {
+                if (response.status === 200) {
+                    return response.json();
+                } else {
+                    throw new Error(`Failed with status: ${response.status}`);
+                }
+            }).then((data) => {
+                setOtpSendSuccessfully(true);
+                toast.success('OTP Sent Successfully')
+            }).catch(err => {
+                console.log("error:", err);
+                toast.warning(err)
+            })
+        } else {
+            console.log("Error: empty email field");
+        }
+    };
+
     return (
-        <UserAuthContext.Provider value={{ userData, 
-        setUserData, 
-        serverUp, 
-        totalWellnessValue,
-        inputData,
-        setInputData,
-        loginUser,
-        signUpUser,
-        setLogin,
-        login }}>
+        <UserAuthContext.Provider value={{
+            userData,
+            setUserData,
+            serverUp,
+            totalWellnessValue,
+            inputData,
+            setInputData,
+            loginUser,
+            signUpUser,
+            setLogin,
+            login,
+            otpSendSuccessfully,
+            getOtp
+        }}>
+            <Toaster />
             {children}
         </UserAuthContext.Provider>
     )

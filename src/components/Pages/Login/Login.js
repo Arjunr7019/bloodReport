@@ -4,10 +4,11 @@ import { UserAuthContext } from '../../../Context/UserAuth';
 import { mirage } from 'ldrs';
 
 export default function Login() {
-    const { serverUp, inputData, setInputData, loginUser, signUpUser, setLogin, login } = useContext(UserAuthContext);
+    const { serverUp, inputData, setInputData, loginUser, signUpUser, setLogin, login, otpSendSuccessfully,
+        getOtp } = useContext(UserAuthContext);
     const [dropDown, setDropDown] = useState(false);
     const [passwordvisibility, setPasswordvisibility] = useState(false);
-    const [forgotPassword, setForgotPassword] = useState(true)
+    const [forgotPassword, setForgotPassword] = useState(false)
 
     mirage.register()
 
@@ -96,29 +97,31 @@ export default function Login() {
                                         <label htmlFor="emailId" className="form-label w-100 text-start text-light">Email address</label>
                                         <div className='d-flex'>
                                             <input onChange={(e) => setInputData(val => { return { ...val, email: e.target.value } })} value={inputData?.email} type="email" className="form-control" id="emailId" placeholder="name@example.com" />
-                                            <div className='w-25 d-flex justify-content-center align-items-center ps-1'>
-                                                <div className='cursorPointer theme-card-dark px-3 py-2 text-light rounded-3'>GetOTP</div>
+                                            <div className='w-25 d-flex justify-content-center align-items-center ps-2'>
+                                                <div onClick={() => getOtp()} className='cursorPointer theme-card-dark px-3 py-2 text-light rounded-3'>GetOTP</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="mb-3">
-                                        <label htmlFor="OTPId" className="form-label w-100 text-start text-light">OTP</label>
-                                        <input onChange={(e) => setInputData(val => { return { ...val, otp: e.target.value } })} value={inputData?.otp} type="text" className="form-control" id="OTPId" placeholder="One Time Password" />
-                                    </div>
-                                    <div className="position-relative mb-4">
-                                        <label htmlFor="passwordId" className="form-label w-100 text-start text-light">Password</label>
-                                        <input onChange={(e) => setInputData(val => { return { ...val, password: e.target.value } })} value={inputData?.password} type={passwordvisibility ? "text" : "password"} className="form-control" id="passwordId" placeholder="Password" />
-                                        <span onClick={() => passwordvisibility ? setPasswordvisibility(false) : setPasswordvisibility(true)} className="passwordIcon cursorPointer material-symbols-outlined">
-                                            {passwordvisibility ? "visibility" : "visibility_off"}
-                                        </span>
-                                    </div>
+                                    {otpSendSuccessfully?<>
+                                        <div className="mb-3">
+                                            <label htmlFor="OTPId" className="form-label w-100 text-start text-light">OTP</label>
+                                            <input onChange={(e) => setInputData(val => { return { ...val, otp: e.target.value } })} value={inputData?.otp} type="text" className="form-control" id="OTPId" placeholder="One Time Password" />
+                                        </div>
+                                        <div className="position-relative mb-4">
+                                            <label htmlFor="passwordId" className="form-label w-100 text-start text-light">Password</label>
+                                            <input onChange={(e) => setInputData(val => { return { ...val, password: e.target.value } })} value={inputData?.password} type={passwordvisibility ? "text" : "password"} className="form-control" id="passwordId" placeholder="Password" />
+                                            <span onClick={() => passwordvisibility ? setPasswordvisibility(false) : setPasswordvisibility(true)} className="passwordIcon cursorPointer material-symbols-outlined">
+                                                {passwordvisibility ? "visibility" : "visibility_off"}
+                                            </span>
+                                        </div>
+                                    </>:<></>}
                                     <div className='d-flex justify-content-center align-items-center flex-row text-light mb-2'>
                                         <p className='m-0'>Back to Login</p>
                                         <a className='text-light mx-1' href="/" onClick={(e) => { e.preventDefault(); setForgotPassword(false) }}>Rest</a>
                                     </div>
-                                    <div className='w-100 d-flex justify-content-center align-items-center'>
+                                    {otpSendSuccessfully ? <div className='w-100 d-flex justify-content-center align-items-center'>
                                         <div className='cursorPointer theme-card-dark px-3 py-2 text-light rounded-3'>Submit</div>
-                                    </div>
+                                    </div> : <></>}
                                 </div>
                             </div>
                         </div>}
