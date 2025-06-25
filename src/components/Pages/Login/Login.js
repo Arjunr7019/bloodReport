@@ -2,6 +2,7 @@ import React, { useContext, useRef, useState } from 'react';
 import '../../../App.css';
 import { UserAuthContext } from '../../../Context/UserAuth';
 import { mirage } from 'ldrs';
+import { Toaster, toast } from 'sonner'
 
 export default function Login() {
     const { serverUp, inputData, setInputData, loginUser, signUpUser, setLogin, login, otpSendSuccessfully,
@@ -98,11 +99,19 @@ export default function Login() {
                                         <div className='d-flex'>
                                             <input onChange={(e) => setInputData(val => { return { ...val, email: e.target.value } })} value={inputData?.email} type="email" className="form-control" id="emailId" placeholder="name@example.com" />
                                             <div className='w-25 d-flex justify-content-center align-items-center ps-2'>
-                                                <div onClick={() => getOtp()} className='cursorPointer theme-card-dark px-3 py-2 text-light rounded-3'>GetOTP</div>
+                                                <div onClick={() => toast.promise(getOtp(), {
+                                                    loading: 'Loading...',
+                                                    success: (data) => {
+                                                        return `${data}`;
+                                                    },
+                                                    error: (error) => {
+                                                        return `${error}`;
+                                                    },
+                                                })} className='cursorPointer theme-card-dark px-3 py-2 text-light rounded-3'>GetOTP</div>
                                             </div>
                                         </div>
                                     </div>
-                                    {otpSendSuccessfully?<>
+                                    {otpSendSuccessfully ? <>
                                         <div className="mb-3">
                                             <label htmlFor="OTPId" className="form-label w-100 text-start text-light">OTP</label>
                                             <input onChange={(e) => setInputData(val => { return { ...val, otp: e.target.value } })} value={inputData?.otp} type="text" className="form-control" id="OTPId" placeholder="One Time Password" />
@@ -114,7 +123,7 @@ export default function Login() {
                                                 {passwordvisibility ? "visibility" : "visibility_off"}
                                             </span>
                                         </div>
-                                    </>:<></>}
+                                    </> : <></>}
                                     <div className='d-flex justify-content-center align-items-center flex-row text-light mb-2'>
                                         <p className='m-0'>Back to Login</p>
                                         <a className='text-light mx-1' href="/" onClick={(e) => { e.preventDefault(); setForgotPassword(false) }}>Rest</a>

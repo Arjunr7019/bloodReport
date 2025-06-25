@@ -154,26 +154,28 @@ export const UserAuthProvider = ({ children }) => {
         }
     }
 
-    const getOtp = () => {
+    const getOtp = ()=> new Promise((resolve,reject)=>{
         let email = inputData.email;
         if (email) {
             fetch(`https://bloodreport-server.onrender.com/api/forgotPassword/${email}`).then((response) => {
                 if (response.status === 200) {
+                    resolve("OTP Sent Successfully")
                     return response.json();
                 } else {
+                    reject("error while sending OTP try again later")
                     throw new Error(`Failed with status: ${response.status}`);
                 }
             }).then((data) => {
                 setOtpSendSuccessfully(true);
-                toast.success('OTP Sent Successfully')
+                // toast.success('OTP Sent Successfully')
             }).catch(err => {
                 console.log("error:", err);
-                toast.warning(err)
+                // toast.warning(err)
             })
         } else {
             console.log("Error: empty email field");
         }
-    };
+    })
 
     return (
         <UserAuthContext.Provider value={{
@@ -190,7 +192,7 @@ export const UserAuthProvider = ({ children }) => {
             otpSendSuccessfully,
             getOtp
         }}>
-            <Toaster />
+            <Toaster position="top-center"/>
             {children}
         </UserAuthContext.Provider>
     )
