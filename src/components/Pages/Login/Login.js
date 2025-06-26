@@ -6,7 +6,7 @@ import { Toaster, toast } from 'sonner'
 
 export default function Login() {
     const { serverUp, inputData, setInputData, loginUser, signUpUser, setLogin, login, otpSendSuccessfully,
-        getOtp } = useContext(UserAuthContext);
+        getOtp,verifyOtp } = useContext(UserAuthContext);
     const [dropDown, setDropDown] = useState(false);
     const [passwordvisibility, setPasswordvisibility] = useState(false);
     const [forgotPassword, setForgotPassword] = useState(false)
@@ -114,7 +114,20 @@ export default function Login() {
                                     {otpSendSuccessfully ? <>
                                         <div className="mb-3">
                                             <label htmlFor="OTPId" className="form-label w-100 text-start text-light">OTP</label>
-                                            <input onChange={(e) => setInputData(val => { return { ...val, otp: e.target.value } })} value={inputData?.otp} type="text" className="form-control" id="OTPId" placeholder="One Time Password" />
+                                            <div className='d-flex'>
+                                                <input onChange={(e) => setInputData(val => { return { ...val, otp: e.target.value } })} value={inputData?.otp} type="text" className="form-control" id="OTPId" placeholder="One Time Password" />
+                                                <div className='w-25 d-flex justify-content-center align-items-center ps-2'>
+                                                    <div onClick={() => toast.promise(verifyOtp(), {
+                                                        loading: 'Loading...',
+                                                        success: (data) => {
+                                                            return `${data}`;
+                                                        },
+                                                        error: (error) => {
+                                                            return `${error}`;
+                                                        },
+                                                    })} className='cursorPointer theme-card-dark px-3 py-2 text-light rounded-3'>Verify</div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div className="position-relative mb-4">
                                             <label htmlFor="passwordId" className="form-label w-100 text-start text-light">Password</label>

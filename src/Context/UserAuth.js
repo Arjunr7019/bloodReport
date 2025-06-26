@@ -154,7 +154,7 @@ export const UserAuthProvider = ({ children }) => {
         }
     }
 
-    const getOtp = ()=> new Promise((resolve,reject)=>{
+    const getOtp = () => new Promise((resolve, reject) => {
         let email = inputData.email;
         if (email) {
             fetch(`https://bloodreport-server.onrender.com/api/forgotPassword/${email}`).then((response) => {
@@ -167,6 +167,39 @@ export const UserAuthProvider = ({ children }) => {
                 }
             }).then((data) => {
                 setOtpSendSuccessfully(true);
+                // toast.success('OTP Sent Successfully')
+            }).catch(err => {
+                console.log("error:", err);
+                // toast.warning(err)
+            })
+        } else {
+            console.log("Error: empty email field");
+        }
+    })
+
+    const verifyOtp = () => new Promise((resolve, reject) => {
+        let email = inputData.email;
+        let otp = inputData.otp;
+        if (email && otp) {
+            fetch(`https://bloodreport-server.onrender.com/api/forgotPassword/verifyOtp`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email,
+                    otp
+                })
+            }).then((response) => {
+                if (response.status === 200) {
+                    resolve("OTP Verify Successfully")
+                    return response.json();
+                } else {
+                    reject("not valid OTP")
+                    throw new Error(`Failed with status: ${response.status}`);
+                }
+            }).then((data) => {
+                // setOtpSendSuccessfully(true);
                 // toast.success('OTP Sent Successfully')
             }).catch(err => {
                 console.log("error:", err);
@@ -190,9 +223,10 @@ export const UserAuthProvider = ({ children }) => {
             setLogin,
             login,
             otpSendSuccessfully,
-            getOtp
+            getOtp,
+            verifyOtp
         }}>
-            <Toaster position="top-center"/>
+            <Toaster position="top-center" />
             {children}
         </UserAuthContext.Provider>
     )
