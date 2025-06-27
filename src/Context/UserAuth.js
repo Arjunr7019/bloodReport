@@ -11,6 +11,8 @@ export const UserAuthProvider = ({ children }) => {
     const [inputData, setInputData] = useState({ parameterValue: "" })
     const [login, setLogin] = useState(true);
     const [otpSendSuccessfully, setOtpSendSuccessfully] = useState(false);
+    const [forgotPassword, setForgotPassword] = useState(false)
+    const [otpVerifiedSuccessfully, setOtpVerifiedSuccessfully] = useState(false)
     // const [wellnessValue, setWellnessValue] = useState({});
 
     useEffect(() => {
@@ -199,14 +201,48 @@ export const UserAuthProvider = ({ children }) => {
                     throw new Error(`Failed with status: ${response.status}`);
                 }
             }).then((data) => {
-                // setOtpSendSuccessfully(true);
+                setOtpVerifiedSuccessfully(true);
                 // toast.success('OTP Sent Successfully')
             }).catch(err => {
                 console.log("error:", err);
                 // toast.warning(err)
             })
         } else {
-            console.log("Error: empty email field");
+            console.log("Error: empty input field");
+        }
+    })
+
+    const updatePassword = () => new Promise((resolve, reject) => {
+        let email = inputData.email;
+        let password = inputData.password;
+        if (email && password) {
+            fetch(`https://bloodreport-server.onrender.com/api/forgotPassword/updateNewPassword`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            }).then((response) => {
+                if (response.status === 200) {
+                    resolve("Password updated Successfully")
+                    return response.json();
+                } else {
+                    reject("error while updating password. try again later")
+                    throw new Error(`Failed with status: ${response.status}`);
+                }
+            }).then((data) => {
+                // setOtpSendSuccessfully(true);
+                setTimeout(()=> toast.success("Redirecting to login page"),3000)
+                setTimeout(()=> setForgotPassword(false),6000)
+            }).catch(err => {
+                console.log("error:", err);
+                // toast.warning(err)
+            })
+        } else {
+            console.log("Error: empty input field");
         }
     })
 
@@ -224,7 +260,11 @@ export const UserAuthProvider = ({ children }) => {
             login,
             otpSendSuccessfully,
             getOtp,
-            verifyOtp
+            verifyOtp,
+            forgotPassword,
+            setForgotPassword,
+            updatePassword,
+            otpVerifiedSuccessfully
         }}>
             <Toaster position="top-center" />
             {children}
