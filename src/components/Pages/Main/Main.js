@@ -75,8 +75,9 @@ export default function Main() {
                     <span></span>
                   </nav> */}
                   </div>
-                  <div className='w-100 d-flex justify-content-end align-items-center pe-4'>
-                    {logoutButton ? <p onClick={() => { Services.Logout(); setUserData(null) }} className='m-0 navBar px-2 mt-2' style={{ color: "white" }}>Logout</p> : <></>}
+                  <div className='w-100 d-flex justify-content-center align-items-end flex-column pe-1 mt-2'>
+                    {logoutButton ? <p className='m-0 navBar px-2 mb-2 user-select-none' style={{ color: "white" }}>Edit Profile</p> : <></>}
+                    {logoutButton ? <p onClick={() => { Services.Logout(); setUserData(null) }} className='m-0 navBar px-2 user-select-none' style={{ color: "white" }}>Logout</p> : <></>}
                   </div>
                 </div>
               </div>
@@ -111,11 +112,11 @@ export default function Main() {
                   <div className='menuModal d-flex justify-content-evenly align-items p-2' style={{ width: "fit-content" }}>
                     <div className='rounded-3 p-2' onClick={() => setMenuData({ "Dashboard": true, "AddParameter": false })} style={menuData.Dashboard ? { border: "1px solid #ffffff4d" } : {}}>
                       <img style={{ width: "2rem" }} src={dashboardIcon} alt="icon" />
-                      <p className='m-0' style={{ fontSize: "80%", color: "white" }}>Dashboard</p>
+                      <p className='m-0 user-select-none' style={{ fontSize: "80%", color: "white" }}>Dashboard</p>
                     </div>
                     <div className='rounded-3 p-2' onClick={() => setMenuData({ "Dashboard": false, "AddParameter": true })} style={menuData.Dashboard ? {} : { border: "1px solid #ffffff4d" }}>
                       <img style={{ width: "2rem" }} src={addValueIcon} alt="icon" />
-                      <p className='m-0' style={{ fontSize: "80%", color: "white" }}>Add Value</p>
+                      <p className='m-0 user-select-none' style={{ fontSize: "80%", color: "white" }}>Add Value</p>
                     </div>
                   </div>
                 </div>
