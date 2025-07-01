@@ -32,10 +32,13 @@ export default function Dashboard() {
     // const [graph, setGraph] = useState(true);
     const [selectedId, setSelectedId] = useState(null);
     const [parametersName, setParameterName] = useState("ESR");
-    const [sortedDate, setSortedData] = useState(null)
+    const [sortedDate, setSortedData] = useState(null);
+    const [userDetails, setUserDetails] = useState({ name: "", DOB: "", gender: "" })
 
-    const { userData, setUserData,totalWellnessValue } = useContext(UserAuthContext);
+    const { userData, setUserData, totalWellnessValue, changeUserDetails } = useContext(UserAuthContext);
     const { menuData } = useContext(MenuContext);
+    const date = new Date();
+    const today = date.toISOString().slice(0, 10);
 
     const parameterValue = [
         { value: "ESR", id: "1" },
@@ -75,7 +78,7 @@ export default function Dashboard() {
         //         setSortedData(null)
         //     }
         // }
-    }, [parametersName,userData])
+    }, [parametersName, userData])
 
     const data = {
         labels: sortedDate?.map((data) => data.date),
@@ -98,7 +101,7 @@ export default function Dashboard() {
             {
                 label: "Systolic",
                 color: "white",
-                data: sortedDate?.map((data) => data.value.slice(0,3)),
+                data: sortedDate?.map((data) => data.value.slice(0, 3)),
                 backgroundColor: '#296dc0',
                 borderColor: '#3690fe',
                 pointBorderColor: '#296dc0',
@@ -210,26 +213,47 @@ export default function Dashboard() {
                             <motion.div className='d-flex justify-content-start align-items-center flex-column mx-3 my-2'>
                                 <motion.div className='w-100 d-flex justify-content-center align-items-center flex-row mb-2'>
                                     <motion.p className='text-light m-0 me-2'>Name:</motion.p>
-                                    <motion.input type='text' placeholder={userData?.data.user?.name} className='placeholderColor customInput text-light text-start w-100'></motion.input>
+                                    <motion.input
+                                        className='placeholderColor customInput text-light text-start w-100'
+                                        type='text'
+                                        placeholder={userData?.data.user?.name}
+                                        value={userDetails.name}
+                                        onChange={(e) => setUserDetails(val => { return { ...val, name: e.target.value } })}
+                                    ></motion.input>
                                 </motion.div>
                                 <motion.div className='w-100 d-flex justify-content-center align-items-center flex-row mb-2'>
                                     <motion.p className='text-light m-0 me-2'>DOB:</motion.p>
-                                    <motion.input type='date' defaultValue={userData?.data.user?.DOB} placeholder={userData?.data.user?.DOB} className='placeholderColor customInput text-light text-start w-100 my-0'></motion.input>
+                                    <motion.input
+                                        className='placeholderColor customInput text-light text-start w-100 my-0'
+                                        type='date'
+                                        defaultValue={userData?.data.user?.DOB}
+                                        placeholder={userData?.data.user?.DOB}
+                                        // value={userDetails.DOB}
+                                        max={today}
+                                        onChange={(e) => setUserDetails(val => { return { ...val, DOB: e.target.value } })}
+                                    ></motion.input>
                                 </motion.div>
                                 <motion.div className='w-100 d-flex justify-content-center align-items-center flex-row mb-2'>
                                     <motion.p className='text-light m-0 me-2'>Gender</motion.p>
-                                    <motion.input type='text' placeholder={userData?.data.user?.gender} className='placeholderColor customInput text-light text-start w-100 my-0'></motion.input>
+                                    <motion.input
+                                        className='placeholderColor customInput text-light text-start w-100 my-0'
+                                        type='text'
+                                        placeholder={userData?.data.user?.gender}
+                                        value={userDetails.gender}
+                                        onChange={(e) => setUserDetails(val => { return { ...val, gender: e.target.value } })}
+                                    ></motion.input>
                                 </motion.div>
                             </motion.div>
-                            <motion.button className='cursorPointer theme-card-dark rounded-2 my-2 text-light' onClick={() => setSelectedId(null)}>Save</motion.button>
+                            <motion.button className='cursorPointer theme-card-dark rounded-2 my-2 text-light'
+                                onClick={() => { changeUserDetails(userDetails.name, userDetails.DOB, userDetails.gender); setSelectedId(null) }}>Save</motion.button>
                         </motion.div>
                     )}
                 </AnimatePresence>
 
                 <div style={{ position: "relative", height: "100%", overflow: "hidden" }} className='bgWellnessCard w-50 rounded-3 theme-card py-4'>
                     <img style={{ position: "absolute", zIndex: 0, left: 0, top: 0, width: "100%" }} className='bgWellnessCardImg' src={wellnessScoreImage} alt="img" />
-                    <h2 style={{ position: "relative", cursor: "context-menu",textShadow:"0.5px 0.5px #000000" }} className='text-light'>Wellness Score</h2>
-                    <h3 style={{ position: "relative", cursor: "context-menu",textShadow:"0.5px 0.5px #000000" }} className='text-light'>{totalWellnessValue}</h3>
+                    <h2 style={{ position: "relative", cursor: "context-menu", textShadow: "0.5px 0.5px #000000" }} className='text-light'>Wellness Score</h2>
+                    <h3 style={{ position: "relative", cursor: "context-menu", textShadow: "0.5px 0.5px #000000" }} className='text-light'>{totalWellnessValue}</h3>
                 </div>
                 {/* <div className='w-50 rounded-3 bgWellnessCard theme-card py-4'>
                     <h2 className='text-light'>Wellness Score</h2>

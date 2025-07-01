@@ -235,14 +235,25 @@ export const UserAuthProvider = ({ children }) => {
                 }
             }).then((data) => {
                 // setOtpSendSuccessfully(true);
-                setTimeout(()=> toast.success("Redirecting to login page"),3000)
-                setTimeout(()=> setForgotPassword(false),6000)
+                setTimeout(() => toast.success("Redirecting to login page"), 3000)
+                setTimeout(() => setForgotPassword(false), 6000)
             }).catch(err => {
                 console.log("error:", err);
                 // toast.warning(err)
             })
         } else {
             console.log("Error: empty input field");
+        }
+    });
+
+    const changeUserDetails = (name, DOB, gender) => new Promise((resolve, reject) => {
+        if (userData?.data.user?.name !== name && userData?.data.user?.DOB !== DOB && userData?.data.user?.gender !== gender
+            && (name !== "" || DOB !== "" || gender !== "")) {
+            console.log("user details changed");
+            console.log(`name:${name} DOB:${DOB} gender:${gender}`)
+        } else {
+            console.log("no changes");
+            console.log(`name:${name} DOB:${DOB} gender:${gender}`)
         }
     })
 
@@ -264,7 +275,8 @@ export const UserAuthProvider = ({ children }) => {
             forgotPassword,
             setForgotPassword,
             updatePassword,
-            otpVerifiedSuccessfully
+            otpVerifiedSuccessfully,
+            changeUserDetails
         }}>
             <Toaster position="top-center" />
             {children}
