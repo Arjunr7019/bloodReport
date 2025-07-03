@@ -249,8 +249,34 @@ export const UserAuthProvider = ({ children }) => {
     const changeUserDetails = (name, DOB, gender) => new Promise((resolve, reject) => {
         if (userData?.data.user?.name !== name && userData?.data.user?.DOB !== DOB && userData?.data.user?.gender !== gender
             && (name !== "" || DOB !== "" || gender !== "")) {
-            console.log("user details changed");
-            console.log(`name:${name} DOB:${DOB} gender:${gender}`)
+            // console.log("user details changed");
+            // console.log(`name:${name} DOB:${DOB} gender:${gender}`)
+            fetch(`https://bloodreport-server.onrender.com/api/updateUserDetails`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: userData?.data?.user?.email,
+                    name,
+                    DOB,
+                    gender
+                })
+            }).then((response) => {
+                if (response.status === 200) {
+                    resolve("user details updated Successfully")
+                    return response.json();
+                } else {
+                    reject("error while updating user details. try again later")
+                    throw new Error(`Failed with status: ${response.status}`);
+                }
+            }).then((data) => {
+                Services.setUserAuth(data.user)
+                setUserData(data.user);
+            }).catch(err => {
+                console.log("error:", err);
+                // toast.warning(err)
+            })
         } else {
             console.log("no changes");
             console.log(`name:${name} DOB:${DOB} gender:${gender}`)
