@@ -8,6 +8,7 @@ import wellnessScoreImage from '../../images/bgWellnessCard.png';
 import { MenuContext } from '../../Context/MenuContext';
 import Services from '../../Services/Services';
 import { Line } from 'react-chartjs-2';
+import { Toaster, toast } from 'sonner'
 import {
     Chart as Chartjs,
     LineElement,
@@ -169,6 +170,7 @@ export default function Dashboard() {
 
     return (
         <div className='contentSection vh-100 w-75'>
+            <Toaster position="top-center" />
             <div className='my-4 w-100 d-flex justify-content-staet align-items-center flex-row px-5'>
                 <h3 className='text-light'>{menuData?.AddParameter ? "Add Parameter" : "Dashboard"}</h3>
                 <div className='theme-card d-flex justify-content-center align-items-center mx-2 rounded-2'>
@@ -245,7 +247,18 @@ export default function Dashboard() {
                                 </motion.div>
                             </motion.div>
                             <motion.button className='cursorPointer theme-card-dark rounded-2 my-2 text-light'
-                                onClick={() => { changeUserDetails(userDetails.name, userDetails.DOB, userDetails.gender); setSelectedId(null) }}>Save</motion.button>
+                                onClick={() => toast.promise(changeUserDetails(userDetails.name, userDetails.DOB, userDetails.gender), {
+                                        loading: 'updating...',
+                                        success: (data) => {
+                                            setSelectedId(null);
+                                            setUserDetails({ name: "", DOB: "", gender: "" })
+                                            return `${data}`;
+                                        },
+                                        error: (error) => {
+                                            return `${error}`;
+                                        },
+                                    })
+                                }>Save</motion.button>
                         </motion.div>
                     )}
                 </AnimatePresence>

@@ -258,9 +258,9 @@ export const UserAuthProvider = ({ children }) => {
                 },
                 body: JSON.stringify({
                     email: userData?.data?.user?.email,
-                    name,
-                    DOB,
-                    gender
+                    name:name==="" ? null : name,
+                    DOB:DOB==="" ? null : DOB,
+                    gender:gender==="" ? null : gender
                 })
             }).then((response) => {
                 if (response.status === 200) {
@@ -271,13 +271,14 @@ export const UserAuthProvider = ({ children }) => {
                     throw new Error(`Failed with status: ${response.status}`);
                 }
             }).then((data) => {
-                Services.setUserAuth(data.user)
-                setUserData(data.user);
+                Services.setUserAuth({data:{"user":data.user}})
+                setUserData({data:{"user":data.user}});
             }).catch(err => {
                 console.log("error:", err);
                 // toast.warning(err)
             })
         } else {
+            reject("no changes")
             console.log("no changes");
             console.log(`name:${name} DOB:${DOB} gender:${gender}`)
         }
