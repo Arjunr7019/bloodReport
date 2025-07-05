@@ -15,11 +15,13 @@ export const UserAuthProvider = ({ children }) => {
     const [otpVerifiedSuccessfully, setOtpVerifiedSuccessfully] = useState(false)
     // const [wellnessValue, setWellnessValue] = useState({});
 
+    const baseUrl = `https://bloodreport-server.onrender.com/api`
+
     useEffect(() => {
         Services.getUserAuth().then(res => {
             res ? setUserData(res) : setUserData(null);
         });
-        fetch(`https://bloodreport-server.onrender.com/api`)
+        fetch(`${baseUrl}`)
             .then(res => setServerUp(true))
             .catch(error => console.log('error', error));
     }, [])
