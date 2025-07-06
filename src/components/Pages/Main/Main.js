@@ -10,12 +10,13 @@ import PerformanceTrack from '../../smallComponents/PerformanceTrack';
 import logo from '../../../images/bloodReport.png';
 import dashboardIcon from '../../../images/bxs-dashboard.svg';
 import addValueIcon from '../../../images/bxs-add-to-queue.svg';
+import { Toaster, toast } from 'sonner'
 
 export default function Main() {
-  const { userData, setUserData, serverUp, totalWellnessValue } = useContext(UserAuthContext);
+  const { userData, setUserData, serverUp, totalWellnessValue,changeUserDetails } = useContext(UserAuthContext);
   const [menuData, setMenuData] = useState({ "Dashboard": true, "AddParameter": false });
   const [logoutButton, setLogoutButton] = useState(false);
-  const [navAction,setNavAction] = useState("0px")
+  const [navAction, setNavAction] = useState("0px")
   const [userDetails, setUserDetails] = useState({ name: "", DOB: "", gender: "" })
 
   const date = new Date();
@@ -45,8 +46,8 @@ export default function Main() {
   //     console.log("error:", err);
   //   })
   // }, [serverUp])
-  const EditUserDetails = ()=>{
-    navAction === "0px"?setNavAction("fit-content"):setNavAction("0px")
+  const EditUserDetails = () => {
+    navAction === "0px" ? setNavAction("fit-content") : setNavAction("0px")
   }
 
 
@@ -85,12 +86,12 @@ export default function Main() {
                   </div>
                   <div className='w-100 d-flex justify-content-end align-items-center flex-row pe-1 mt-2'>
                     <div className='d-flex flex-column justify-content-start align-items-end'>
-                      {logoutButton ? <p className='m-0 navBar px-2 mb-2 user-select-none' onClick={()=> EditUserDetails()} style={{ color: "white" }}>Edit Profile</p> : <></>}
+                      {logoutButton ? <p className='m-0 navBar px-2 mb-2 user-select-none' onClick={() => EditUserDetails()} style={{ color: "white" }}>Edit Profile</p> : <></>}
                       {logoutButton ? <p onClick={() => { Services.Logout(); setUserData(null) }}
-                        className='m-0 navBar px-2 user-select-none' style={{ color: "white", width:"fit-content" }}>Logout</p> : <></>}
+                        className='m-0 navBar px-2 user-select-none' style={{ color: "white", width: "fit-content" }}>Logout</p> : <></>}
                     </div>
-                    <div className='d-flex flex-column align-items-start ps-2' 
-                    style={{ width:navAction,height:navAction,visibility:navAction !=="0px"?"visible":"hidden" }}>
+                    <div className='d-flex flex-column align-items-start ps-2'
+                      style={{ width: navAction, height: navAction, visibility: navAction !== "0px" ? "visible" : "hidden" }}>
                       <p className='m-0' style={{ color: "white", fontSize: "0.7rem" }}>Name:</p>
                       <input className='placeholderColor customInput text-light text-start w-100'
                         type='text'
@@ -112,7 +113,17 @@ export default function Main() {
                         value={userDetails.gender}
                         onChange={(e) => setUserDetails(val => { return { ...val, gender: e.target.value } })} />
                       <div className='d-flex justify-content-center pt-2 w-100'>
-                         <p className='m-0 navBar px-2 mb-2 user-select-none' style={{ color: "white" }}>Save</p>
+                        <p onClick={() => toast.promise(changeUserDetails(userDetails.name, userDetails.DOB, userDetails.gender), {
+                          loading: 'updating...',
+                          success: (data) => {
+                            setUserDetails({ name: "", DOB: "", gender: "" })
+                            return `${data}`;
+                          },
+                          error: (error) => {
+                            return `${error}`;
+                          },
+                        })}
+                          className='m-0 navBar px-2 mb-2 user-select-none' style={{ color: "white" }}>Save</p>
                       </div>
                     </div>
                   </div>
