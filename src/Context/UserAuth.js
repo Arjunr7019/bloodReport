@@ -18,12 +18,57 @@ export const UserAuthProvider = ({ children }) => {
     const baseUrl = `https://bloodreport-server.onrender.com/api`
 
     useEffect(() => {
-        Services.getUserAuth().then(res => {
-            res ? setUserData(res) : setUserData(null);
-        });
-        fetch(`${baseUrl}`)
-            .then(res => setServerUp(true))
-            .catch(error => console.log('error', error));
+        const userLogData = localStorage.getItem("userLogData");
+        const ipData = JSON.parse(userLogData);
+        // console.log("localIp", ipData?.ip)
+        let currentUserLogData;
+        const checkVisiters = new Promise((resolve, reject) => {
+            fetch("https://get.geojs.io/v1/ip/geo.json").then(response => response.json())
+                .then((data) => {
+                    currentUserLogData = data.ip
+                    resolve(true);
+                }).catch((err) => {
+                    console.log(err);
+                    reject(false)
+                })
+        })
+
+        checkVisiters.then((message) => {
+            Services.getUserAuth().then(res => {
+                res ? setUserData(res) : setUserData(null);
+            });
+            if (message && (ipData?.ip !== currentUserLogData || (ipData?.expiry ? new Date().getTime() > ipData?.expiry : true))) {
+                const serverReady = new Promise((resolve, reject) => {
+                    fetch(`${baseUrl}`).then((response) => {
+                        if (response.status === 200) {
+                            return response.json(); // Parse the JSON only if status is 200
+                        } else {
+                            throw new Error(`Failed with status: ${response.status}`);
+                        }
+                    }).then((data) => {
+                        setServerUp(true)
+                        resolve(true);
+                    }).catch((error) => {
+                        console.log('error', error)
+                        reject(false);
+                    });
+                })
+
+                serverReady.then((val) => {
+                    if (val) {
+                        fetch("https://get.geojs.io/v1/ip/geo.json").then(res => res.json())
+                            .then((result) => {
+                                let item = {
+                                    ip: result.ip,
+                                    expiry: new Date().getTime() + 10 * 60 * 1000
+                                }
+                                localStorage.setItem("userLogData", JSON.stringify(item))
+                            }).catch(err => console.log(err))
+                    }
+                }).catch(err => console.log(err))
+
+            }
+        }).catch(err => console.log(err))
     }, [])
 
     useEffect(() => {
@@ -260,9 +305,9 @@ export const UserAuthProvider = ({ children }) => {
                 },
                 body: JSON.stringify({
                     email: userData?.data?.user?.email,
-                    name:name==="" ? null : name,
-                    DOB:DOB==="" ? null : DOB,
-                    gender:gender==="" ? null : gender
+                    name: name === "" ? null : name,
+                    DOB: DOB === "" ? null : DOB,
+                    gender: gender === "" ? null : gender
                 })
             }).then((response) => {
                 if (response.status === 200) {
@@ -273,8 +318,8 @@ export const UserAuthProvider = ({ children }) => {
                     throw new Error(`Failed with status: ${response.status}`);
                 }
             }).then((data) => {
-                Services.setUserAuth({data:{"user":data.user}})
-                setUserData({data:{"user":data.user}});
+                Services.setUserAuth({ data: { "user": data.user } })
+                setUserData({ data: { "user": data.user } });
             }).catch(err => {
                 console.log("error:", err);
                 // toast.warning(err)
